@@ -44,7 +44,7 @@
     "source-map-support": "^0.4.2",
     "minami": "^1.1.1",
     "jsdoc": "^3.4.0",
-    "ancient-graph": "^0.0.31"
+    "ancient-graph": "^0.0.32"
   },
   "scripts": {
     "compile": "babel --presets es2015 -d ./ src/ -s --minified",

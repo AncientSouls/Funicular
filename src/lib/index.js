@@ -1,3 +1,5 @@
+import each from 'async/each';
+
 /**
  * @example
  * var carriage = new funicular.Carriage('abc');
@@ -28,11 +30,21 @@ class Carriage {
   
   /**
    * Subscribe to get data, data updates and removes events.
-   * Sets `carriage.unsubscribe` method for stop current subscribtion.
+   * Sets `carriage.unsubscribe` method for stop current subscription.
    * 
    * @param {Function} callback
    */
-  subscribe(callback) {}
+  subscribe(callback) {
+    throw new Error('Method subscribe must be overriden!');
+  }
+  
+  /**
+   * Generate childs array from already fetched data.
+   * Sets array `carriage.childs` with string names of child carriages.
+   */
+  generateChildNamesFromData(callback) {
+    throw new Error('Method generateChildNamesFromData must be overriden!');
+  }
   
   /**
    * Method for calling from subscribe method, when data is fetched.
@@ -65,14 +77,38 @@ class Carriage {
   removed() {}
   
   /**
-   * Mount already subscribed data, with some custom logic.
-   * @param {Carriage~mountCallback} [callback]
+   * Register this carriage in childs.
+  
+  /**
+   * Unsafe mount and do what need to do...
+   * Attention! Not for personal usage.
+   * @param {Carriage~unmountCallback} [callback]
    */
-  mount(callback) {
+  unsafeMount(callback) {
     this.stage = 'mounted';
     if (typeof(callback) == 'function') {
       callback();
     }
+  }
+  
+  /**
+   * Subscribed data by name, getting childs names, mount childs, then mount this carriage. If an error occurs, then transactions with subscriptions and children are rolled back.
+   * @param {Carriage~mountCallback} [callback]
+   */
+  mount(callback) {
+    this.subscribe((error) => {
+      if (error) callback(error);
+      else {
+        this.generateChildNamesFromData();
+        this.mountChilds((error) => {
+          if (error) {
+            this.unsubscribe();
+            callback(error);
+          }
+          else this.unsafeMount(callback);
+        });
+      }
+    });
   }
   
   /**
@@ -81,10 +117,11 @@ class Carriage {
    */
   
   /**
-   * Unmount and unregister from carriages in funicular.
+   * Unsafe unmount and unregister from carriages in funicular.
+   * Attention! Not for personal usage.
    * @param {Carriage~unmountCallback} [callback]
    */
-  unmount(callback) {
+  unsafeUnmount(callback) {
     this.stage = 'unmounted';
     delete this.funicular.carriages[this.name][this.id];
     this.unsubscribe();
@@ -94,9 +131,45 @@ class Carriage {
   }
   
   /**
+   * Safe unmount, unregister from parents and childs lists in some carriages.
+   * @param {Carriage~unmountCallback} [callback]
+   */
+  unmount(callback) {
+    this.unsafeUnmount(callback);
+  }
+  
+  /**
    * @callback Carriage~unmountCallback
    * @param error
    */
+  
+  mountChilds(callback) {
+    var childCarriages = [];
+    each(this.childs, (child, nextChild) => {
+      this.funicular.mount(child, (error, carriage) => {
+        if (error) nextChild(error);
+        else {
+          childCarriages.push(carriage);
+          this.tieChild(carriage);
+          nextChild();
+        }
+      });
+    }, (error) => {
+      if (error) {
+        each(childCarriages, (child, nextChild) => {
+          child.unmount(() => nextChild());
+        }, () => {
+          callback(error);
+        });
+      } else callback();
+    });
+  }
+  tieChild(child) {
+    this._childs[child.name] = child;
+    child._parents[this.name] = this;
+  }
+  
+  untie() {}
 }
 
 /**
@@ -135,12 +208,8 @@ class Funicular {
   mount(name, callback) {
     var carriage = new this.Carriage(name);
     var callback = callback || ((error) => { throw error; });
-    carriage.subscribe((error) => {
-      if (error) callback(error);
-      else carriage.mount((error) => {
-        if (error) callback(error);
-        else callback(undefined, carriage);
-      });
+    carriage.mount((error) => {
+      callback(error, carriage);
     });
   }
   

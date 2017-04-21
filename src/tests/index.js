@@ -15,17 +15,23 @@ function generateFunicular(graph = generateGraph()) {
   var OldCarriage = funicular.Carriage;
   funicular.Carriage = class extends OldCarriage {
     subscribe(callback) {
-      this.unsubscribe = () => {};
-      graph.on('update', (oldData, newData)  => {
+      this.unsubscribe = () => {
+        updateStop();
+        removeStop();
+      };
+      var updateStop = graph.on('update', (oldData, newData) => {
         if (newData.id == this.name) this.updated(newData);
       });
-      graph.on('remove', (oldData, newData)  => {
+      var removeStop = graph.on('remove', (oldData, newData) => {
         if (newData.id == this.name) this.removed();
       });
       graph.get(this.name, undefined, (error, data) => {
         this.fetched(error, data);
         callback(error);
       });
+    }
+    generateChildNamesFromData() {
+      this.childs = this.data.childs;
     }
   }
   
@@ -51,6 +57,25 @@ describe('AncientSouls/Funicular', function() {
       assert.deepProperty(carriage, 'data.id');
       assert.equal(carriage.data.id, 'a');
       assert.equal(carriage.stage, 'mounted');
+      done();
+    });
+  });
+  it('funicular.mount with childs', function(done) {
+    var graph = generateGraph();
+    graph.insert({ id: 'a', childs: ['b'] });
+    graph.insert({ id: 'b' });
+    var funicular = generateFunicular(graph);
+    funicular.mount('a', (error, carriage) => {
+      assert.ifError(error);
+      assert.instanceOf(carriage, Carriage);
+      assert.deepProperty(carriage, 'data.id');
+      assert.equal(carriage.data.id, 'a');
+      assert.equal(carriage.stage, 'mounted');
+      assert.deepProperty(carriage, '_childs.b');
+      assert.instanceOf(carriage._childs.b, Carriage);
+      assert.deepProperty(carriage, '_childs.b._parents.a');
+      assert.equal(carriage._childs.b._parents.a, carriage);
+      assert.equal(carriage._childs.b.stage, 'mounted');
       done();
     });
   });
