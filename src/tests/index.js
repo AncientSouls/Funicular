@@ -1,7 +1,7 @@
 require('source-map-support').install();
 
 import { assert } from 'chai';
-import { Funicular, Carriage } from '../lib';
+import Funicular, { Carriage } from '../lib';
 import { ObjectGraph } from 'ancient-graph';
 import async from 'async';
 

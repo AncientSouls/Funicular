@@ -1,6 +1,6 @@
 /**
  * @example
- * var carriage = new Carriage('abc');
+ * var carriage = new funicular.Carriage('abc');
  */
 class Carriage {
   /**
@@ -99,6 +99,13 @@ class Carriage {
    */
 }
 
+/**
+ * @example
+ * import { Funicular } from 'ancient-funicular';
+ * var funicular = new Funicular();
+ * var OldCarriage = funicular.Carriage;
+ * funicular.Carriage = class extends OldCarriage {}
+ */
 class Funicular {
   constructor() {
     var funicular = this;
@@ -145,6 +152,6 @@ class Funicular {
 };
 
 export {
-  Funicular,
+  Funicular as default,
   Carriage,
 }

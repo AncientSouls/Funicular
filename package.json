@@ -49,6 +49,6 @@
   "scripts": {
     "compile": "babel --presets es2015 -d ./ src/ -s --minified",
     "test": "mocha tests/index.js --require source-map-support/register",
-    "jsdoc": "git submodule update --init --recursive && cd ./doc && git checkout gh-pages && cd ../ && npm i && rm -r ./doc/*/ && find ./doc ! -name '.git' -type f -exec rm -rf {} + && jsdoc ./src/lib/*.js ./README.md -r -d ./doc -t ./node_modules/minami -c ./jsdoc.conf.json"
+    "jsdoc": "git submodule update --init --recursive && cd ./doc && git checkout gh-pages && cd ../ && npm i && rm -f -r ./doc/*/ && find ./doc ! -name '.git' -type f -exec rm -rf {} + && jsdoc ./src/lib/*.js ./README.md -r -d ./doc -t ./node_modules/minami -c ./jsdoc.conf.json"
   }
 }

@@ -1,3 +1,4 @@
 [submodule "doc"]
 	path = doc
 	url = https://github.com/AncientSouls/Funicular.git
+	branch = gh-pages
