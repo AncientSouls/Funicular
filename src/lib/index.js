@@ -143,6 +143,10 @@ class Carriage {
    * @param error
    */
   
+  /**
+   * Mount all child names from array in `this.childs`.
+   * @param {Carriage~mountCallback} [callback]
+   */
   mountChilds(callback) {
     var childCarriages = [];
     each(this.childs, (child, nextChild) => {
@@ -164,12 +168,15 @@ class Carriage {
       } else callback();
     });
   }
+  
+  /**
+   * Tie one child with tihs carriage parent.
+   * @param {Carriage} child
+   */
   tieChild(child) {
     this._childs[child.name] = child;
     child._parents[this.name] = this;
   }
-  
-  untie() {}
 }
 
 /**
