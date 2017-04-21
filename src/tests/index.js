@@ -15,6 +15,7 @@ function generateFunicular(graph = generateGraph()) {
   var OldCarriage = funicular.Carriage;
   funicular.Carriage = class extends OldCarriage {
     subscribe(callback) {
+      this.unsubscribe = () => {};
       graph.on('update', (oldData, newData)  => {
         if (newData.id == this.name) this.updated(newData);
       });
@@ -23,9 +24,8 @@ function generateFunicular(graph = generateGraph()) {
       });
       graph.get(this.name, undefined, (error, data) => {
         this.fetched(error, data);
-        callback();
+        callback(error);
       });
-      return () => {};
     }
   }
   
@@ -38,20 +38,32 @@ describe('AncientSouls/Funicular', function() {
   });
   it('new funicular.Carriage', function() {
     var funicular = generateFunicular();
-    var carriage = new funicular.Carriage('abc');
-    assert.deepProperty(funicular, 'carriages.abc.'+carriage.id);
+    var carriage = new funicular.Carriage('a');
+    assert.deepProperty(funicular, 'carriages.a.'+carriage.id);
   });
   it('funicular.mount', function(done) {
     var graph = generateGraph();
-    graph.insert({ id: 'abc' });
+    graph.insert({ id: 'a' });
     var funicular = generateFunicular(graph);
-    funicular.mount('abc', (error, carriage) => {
+    funicular.mount('a', (error, carriage) => {
       assert.ifError(error);
       assert.instanceOf(carriage, Carriage);
       assert.deepProperty(carriage, 'data.id');
-      assert.equal(carriage.data.id, 'abc');
-      assert.equal(carriage.stage, 'fetched');
+      assert.equal(carriage.data.id, 'a');
+      assert.equal(carriage.stage, 'mounted');
       done();
+    });
+  });
+  it('carriage.unmount', function(done) {
+    var graph = generateGraph();
+    graph.insert({ id: 'a' });
+    var funicular = generateFunicular(graph);
+    funicular.mount('a', (error, carriage) => {
+      carriage.unmount(() => {
+        assert.notDeepProperty(funicular, 'carriages.a.'+carriage.id);
+        assert.equal(carriage.stage, 'unmounted');
+        done();
+      });
     });
   });
 });

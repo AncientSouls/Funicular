@@ -28,9 +28,9 @@ class Carriage {
   
   /**
    * Subscribe to get data, data updates and removes events.
+   * Sets `carriage.unsubscribe` method for stop current subscribtion.
    * 
    * @param {Function} callback
-   * @returns {Function} Method for stop current subscribtion.
    */
   subscribe(callback) {}
   
@@ -42,8 +42,12 @@ class Carriage {
    * @param newData
    */
   fetched(error, newData) {
-    this.stage = 'fetched';
-    this.data = newData;
+    if (error) {
+      this.stage = 'broken';
+    } else {
+      this.stage = 'fetched';
+      this.data = newData;
+    }
   }
   
   /**
@@ -59,6 +63,40 @@ class Carriage {
    * Method for calling from subscribe method, when data is removed.
    */
   removed() {}
+  
+  /**
+   * Mount already subscribed data, with some custom logic.
+   * @param {Carriage~mountCallback} [callback]
+   */
+  mount(callback) {
+    this.stage = 'mounted';
+    if (typeof(callback) == 'function') {
+      callback();
+    }
+  }
+  
+  /**
+   * @callback Carriage~mountCallback
+   * @param error
+   */
+  
+  /**
+   * Unmount and unregister from carriages in funicular.
+   * @param {Carriage~unmountCallback} [callback]
+   */
+  unmount(callback) {
+    this.stage = 'unmounted';
+    delete this.funicular.carriages[this.name][this.id];
+    this.unsubscribe();
+    if (typeof(callback) == 'function') {
+      callback();
+    }
+  }
+  
+  /**
+   * @callback Carriage~unmountCallback
+   * @param error
+   */
 }
 
 class Funicular {
@@ -89,10 +127,13 @@ class Funicular {
    */
   mount(name, callback) {
     var carriage = new this.Carriage(name);
-    carriage.subscribe(() => {
-      if (typeof(callback) == 'function') {
-        callback(undefined, carriage);
-      }
+    var callback = callback || ((error) => { throw error; });
+    carriage.subscribe((error) => {
+      if (error) callback(error);
+      else carriage.mount((error) => {
+        if (error) callback(error);
+        else callback(undefined, carriage);
+      });
     });
   }
   
