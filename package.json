@@ -1,0 +1,54 @@
+{
+  "name": "ancient-funicular",
+  "version": "0.0.0",
+  "description": "Just async mounting, updating and unmounting hierarchical compinents to elements.",
+  "keywords": [
+    "javascript",
+    "async",
+    "execution",
+    "mounting",
+    "mount",
+    "hierarchical",
+    "parents",
+    "childs"
+  ],
+  "author": "Ivan S Glazunov <ivansglazunov@gmail.com>",
+  "contributors": [
+    {
+      "name": "Ivan S Glazunov",
+      "email": "ivansglazunov@gmail.com"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AncientSouls/Funicular.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AncientSouls/Funicular/issues"
+  },
+  "main": "./lib/index.js",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib",
+    "test": "tests"
+  },
+  "dependencies": {
+    "async": "^2.3.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "babel-cli": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0",
+    "source-map-support": "^0.4.2",
+    "minami": "^1.1.1",
+    "jsdoc": "^3.4.0",
+    "ancient-graph": "^0.0.31"
+  },
+  "scripts": {
+    "compile": "babel --presets es2015 -d ./ src/ -s --minified",
+    "test": "mocha tests/index.js --require source-map-support/register",
+    "jsdoc": "git submodule update --init --recursive && cd ./doc && git checkout gh-pages && cd ../ && npm i && rm -r ./doc/*/ && find ./doc ! -name '.git' -type f -exec rm -rf {} + && jsdoc ./src/lib/*.js ./README.md -r -d ./doc -t ./node_modules/minami -c ./jsdoc.conf.json"
+  }
+}
