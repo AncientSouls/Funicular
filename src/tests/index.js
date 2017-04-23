@@ -137,4 +137,29 @@ describe('AncientSouls/Funicular', function() {
       });
     });
   });
+  it('update with remaunting', function(done) {
+    var graph = generateGraph();
+    graph.insert({ id: 'a', childs: ['b'] });
+    graph.insert({ id: 'b' });
+    var funicular = generateFunicular(graph);
+    var OldCarriage = funicular.Carriage;
+    funicular.Carriage = class extends OldCarriage {
+      updated(newData) {
+        funicular.mount(this.name, (error, carriage) => {
+          this.moveRoots(carriage);
+          this.remountedCarriage = carriage;
+          carriage.unmountedCallback = this.unmountedCallback;
+          this.unmount();
+        });
+      }
+    };
+    funicular.mountRoot('a', (error, a, unmountRoot) => {
+      graph.update('a', { $set: { childs: ['b'] } });
+    }, (a) => {
+      assert.equal(a.stage, 'unmounted');
+      assert.instanceOf(a.remountedCarriage, Carriage);
+      assert.equal(a.remountedCarriage.stage, 'mounted');
+      done();
+    });
+  });
 });
