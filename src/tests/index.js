@@ -98,12 +98,42 @@ describe('AncientSouls/Funicular', function() {
     var funicular = generateFunicular(graph);
     funicular.mount('a', (error, a) => {
       var b = a._childs.b;
-      a.unmount(() => {
+      a.unmount((error) => {
+        assert.ifError(error);
         assert.notDeepProperty(funicular, 'carriages.a.'+a.id);
         assert.notDeepProperty(funicular, 'carriages.b.'+b.id);
         assert.equal(a.stage, 'unmounted');
         assert.equal(b.stage, 'unmounted');
         done();
+      });
+    });
+  });
+  it('carriage.mountRoot and unmountRoot', function(done) {
+    var graph = generateGraph();
+    graph.insert({ id: 'a', childs: ['b'] });
+    graph.insert({ id: 'b' });
+    var funicular = generateFunicular(graph);
+    funicular.mountRoot('a', (error, a, unmountRootA) => {
+      var b = a._childs.b;
+      a.unmount((error) => {
+        assert.ifError(error);
+        assert.instanceOf(a, Carriage);
+        assert.deepProperty(a, 'data.id');
+        assert.equal(a.data.id, 'a');
+        assert.equal(a.stage, 'mounted');
+        assert.deepProperty(a, '_childs.b');
+        assert.instanceOf(a._childs.b, Carriage);
+        assert.deepProperty(a, '_childs.b._parents.a');
+        assert.equal(a._childs.b._parents.a, a);
+        assert.equal(a._childs.b.stage, 'mounted');
+        unmountRootA((error) => {
+          assert.ifError(error);
+          assert.notDeepProperty(funicular, 'carriages.a.'+a.id);
+          assert.notDeepProperty(funicular, 'carriages.b.'+b.id);
+          assert.equal(a.stage, 'unmounted');
+          assert.equal(b.stage, 'unmounted');
+          done();
+        });
       });
     });
   });

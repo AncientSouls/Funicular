@@ -132,10 +132,14 @@ class Carriage {
   
   /**
    * Safe unmount, unregister from parents and childs lists in some carriages.
+   * Attention! Not for personal usage.
    * @param {Carriage~unmountCallback} [callback]
    */
   unmount(callback) {
-    if (Object.keys(this._parents).length === 0) {
+    if (
+      this.state != 'unmounted' && this.state != 'broken' &&
+      Object.keys(this._parents).length === 0 && !this.funicular.roots[this.id]
+    ) {
       this.unmountChilds(() => {
         this.unsafeUnmount(callback);
       });
@@ -236,19 +240,41 @@ class Funicular {
     this.lastId = 0;
     // { name: { id: Carriage, id: Carriage }, name: { id: Carriage, id: Carriage }, name: { id: Carriage, id: Carriage } }
     this.carriages = {};
+    // { id: Carriage }
+    this.roots = {};
   }
   
   /**
    * Method for mount new carriage in this funicular.
+   * Attention! Not for personal usage because not auto mark carriage aschild and parent. For personal, custom usage please use method {@link Funicular#mountRoot}
    * 
    * @param {String} name
-   * @param {Funicular~mountCallback} [callback]
+   * @param {Funicular~mountCallback} [callback] - Gets already mounted or broken carriage.
    */
   mount(name, callback) {
     var carriage = new this.Carriage(name);
     var callback = callback || ((error) => { throw error; });
     carriage.mount((error) => {
       callback(error, carriage);
+    });
+  }
+  
+  /**
+   * Method for mount new carriage in this funicular as root.
+   * Use for unmount method {@link Carriage#unmountRoot}
+   * 
+   * @param {String} name
+   * @param {Funicular~mountCallback} [callback]
+   * @returns {Funicular~unmountRoot} Returns method for unmount current root mounting instance of carriage, and unmount carriage only if it last root mounting instance and parents is not exists.
+   */
+  mountRoot(name, callback) {
+    this.mount(name, (error, carriage) => {
+      if (!error) this.roots[carriage.id] = carriage;
+      var unmountRoot = (callback) => {
+        delete this.roots[carriage.id];
+        carriage.unmount(callback);
+      };
+      callback(error, carriage, unmountRoot);
     });
   }
   
