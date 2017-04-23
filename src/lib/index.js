@@ -259,6 +259,11 @@ class Carriage {
     }
   }
   
+  /**
+   * @callback Carriage~unmountedCallback
+   * @param {Carriage} carriage
+   */
+  
 }
 
 /**
@@ -313,10 +318,19 @@ class Funicular {
    * 
    * @param {String} name
    * @param {Funicular~mountCallback} [mountedCallback] - Gets already mounted or broken carriage.
-   * @param {Funicular~mountCallback} [unmountedCallback] - Gets unmounted carriage.
+   * @param {Funicular~unmountedCallback} [unmountedCallback] - Gets unmounted carriage.
    * 
    * @example
-   * funicular.mountRoot()
+   * funicular.mountRoot(
+   *   'someDataReference',
+   *   (error, carriage, unmountCarriage) => {
+   *     // carriage someDataReference with all childs are mounted
+   *     setTimeout(() => { unmountCarriage(); }, 1000);
+   *   },
+   *   (carriage) => {
+   *     // carriage someDataReference and free of parents childs are unmounted 
+   *   }
+   * );
    */
   mountRoot(name, mountedCallback, unmountedCallback) {
     var rootId = ++this.lastRootId;
