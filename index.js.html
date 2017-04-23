@@ -24,7 +24,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Carriage.html">Carriage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#fetched">fetched</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#generateChildNamesFromData">generateChildNamesFromData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#mount">mount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#mountChilds">mountChilds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#removed">removed</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#subscribe">subscribe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#tieChild">tieChild</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#unmount">unmount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#unmountChilds">unmountChilds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#unsafeMount">unsafeMount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#unsafeUnmount">unsafeUnmount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#untieChild">untieChild</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#updated">updated</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Funicular.html">Funicular</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Funicular.html#mount">mount</a></span></li>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Carriage.html">Carriage</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#fetched">fetched</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#generateChildNamesFromData">generateChildNamesFromData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#mount">mount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#mountChilds">mountChilds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#removed">removed</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#subscribe">subscribe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#tieChild">tieChild</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#unmount">unmount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#unmountChilds">unmountChilds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#unsafeMount">unsafeMount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#unsafeUnmount">unsafeUnmount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#untieChild">untieChild</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Carriage.html#updated">updated</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Funicular.html">Funicular</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Funicular.html#mount">mount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Funicular.html#mountRoot">mountRoot</a></span></li>
 </nav>
 
 <div id="main">
@@ -173,10 +173,14 @@ class Carriage {
   
   /**
    * Safe unmount, unregister from parents and childs lists in some carriages.
+   * Attention! Not for personal usage.
    * @param {Carriage~unmountCallback} [callback]
    */
   unmount(callback) {
-    if (Object.keys(this._parents).length === 0) {
+    if (
+      this.state != 'unmounted' &amp;&amp; this.state != 'broken' &amp;&amp;
+      Object.keys(this._parents).length === 0 &amp;&amp; !this.funicular.roots[this.id]
+    ) {
       this.unmountChilds(() => {
         this.unsafeUnmount(callback);
       });
@@ -277,19 +281,41 @@ class Funicular {
     this.lastId = 0;
     // { name: { id: Carriage, id: Carriage }, name: { id: Carriage, id: Carriage }, name: { id: Carriage, id: Carriage } }
     this.carriages = {};
+    // { id: Carriage }
+    this.roots = {};
   }
   
   /**
    * Method for mount new carriage in this funicular.
+   * Attention! Not for personal usage because not auto mark carriage aschild and parent. For personal, custom usage please use method {@link Funicular#mountRoot}
    * 
    * @param {String} name
-   * @param {Funicular~mountCallback} [callback]
+   * @param {Funicular~mountCallback} [callback] - Gets already mounted or broken carriage.
    */
   mount(name, callback) {
     var carriage = new this.Carriage(name);
     var callback = callback || ((error) => { throw error; });
     carriage.mount((error) => {
       callback(error, carriage);
+    });
+  }
+  
+  /**
+   * Method for mount new carriage in this funicular as root.
+   * Use for unmount method {@link Carriage#unmountRoot}
+   * 
+   * @param {String} name
+   * @param {Funicular~mountCallback} [callback]
+   * @returns {Funicular~unmountRoot} Returns method for unmount current root mounting instance of carriage, and unmount carriage only if it last root mounting instance and parents is not exists.
+   */
+  mountRoot(name, callback) {
+    this.mount(name, (error, carriage) => {
+      if (!error) this.roots[carriage.id] = carriage;
+      var unmountRoot = (callback) => {
+        delete this.roots[carriage.id];
+        carriage.unmount(callback);
+      };
+      callback(error, carriage, unmountRoot);
     });
   }
   
@@ -315,7 +341,7 @@ export {
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 23 2017 02:12:10 GMT+0000 (UTC) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sun Apr 23 2017 02:45:25 GMT+0000 (UTC) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
