@@ -12,11 +12,11 @@ class Carriage {
     this.name = name;
     
     /**
-     * * 'broken' - Broken in any method... somewere.
-     * * 'construct' - Not subscribed, fetched and mounted. Just constructed and registred in funicular.
-     * * 'fetched' - Subscribed and fetched.
-     * * 'mounted' - Mounted.
-     * * 'unmounted' - Unmounted.
+     * * `broken` - Broken in any method... somewere.
+     * * `construct` - Not subscribed, fetched and mounted. Just constructed and registred in funicular.
+     * * `fetched` - Subscribed and fetched.
+     * * `mounted` - Mounted.
+     * * `unmounted` - Unmounted.
      */
     this.stage = 'construct';
     // ['name']
@@ -27,6 +27,8 @@ class Carriage {
     this._parents = {};
     this.data = undefined;
     this.roots = [];
+    this.unmountedCallbacks = [];
+    this.mountedCallbacks = [];
   }
   
   /**
@@ -43,8 +45,8 @@ class Carriage {
    * Generate childs array from already fetched data.
    * Sets array `carriage.childs` with string names of child carriages.
    */
-  generateChildNamesFromData(callback) {
-    throw new Error('Method generateChildNamesFromData must be overriden!');
+  getChildsNames(callback) {
+    throw new Error('Method getChildsNames must be overriden!');
   }
   
   /**
@@ -82,7 +84,7 @@ class Carriage {
   
   /**
    * Unsafe mount and do what need to do...
-   * Attention! Not for personal usage.
+   * Attention! Not for external usage.
    * @param {Carriage~unmountCallback} [callback]
    */
   unsafeMount(callback) {
@@ -97,16 +99,22 @@ class Carriage {
    * @param {Carriage~mountCallback} [mountedCallback]
    */
   mount(mountedCallback) {
+    var callback = (error) => {
+      if (mountedCallback) mountedCallback(error, this);
+      for (var callback of this.mountedCallbacks) {
+        callback(error, this);
+      }
+    };
     this.subscribe((error) => {
-      if (error) mountedCallback(error);
+      if (error) callback(error);
       else {
-        this.generateChildNamesFromData();
+        this.getChildsNames();
         this.mountChilds((error) => {
           if (error) {
             this.unsubscribe();
-            mountedCallback(error);
+            callback(error);
           }
-          else this.unsafeMount(mountedCallback);
+          else this.unsafeMount(callback);
         });
       }
     });
@@ -115,19 +123,20 @@ class Carriage {
   /**
    * @callback Carriage~mountCallback
    * @param error
+   * @param {Carriage} carriage
    */
   
   /**
    * Unsafe unmount and unregister from carriages in funicular.
-   * Attention! Not for personal usage.
+   * Attention! Not for external usage.
    * @param {Carriage~unmountCallback} [callback]
    */
   unsafeUnmount(callback) {
     this.stage = 'unmounted';
     delete this.funicular.carriages[this.name][this.id];
     this.unsubscribe();
-    if (typeof(this.unmountedCallback) == 'function') {
-      this.unmountedCallback(this);
+    for (var unmountedCallback of this.unmountedCallbacks) {
+      unmountedCallback(this);
     }
     if (typeof(callback) == 'function') {
       callback();
@@ -136,7 +145,7 @@ class Carriage {
   
   /**
    * Safe unmount, unregister from parents and childs lists in some carriages.
-   * Attention! Not for personal usage.
+   * Attention! Not for external usage.
    * @param {Carriage~unmountCallback} [callback]
    */
   unmount(callback) {
@@ -284,7 +293,7 @@ class Funicular {
   
   /**
    * Method for mount new carriage in this funicular.
-   * Attention! Not for personal usage because not auto mark carriage aschild and parent. For personal, custom usage please use method {@link Funicular#mountRoot}
+   * Attention! Not for external usage because not auto mark carriage aschild and parent. For external, custom usage please use method {@link Funicular#mountRoot}
    * 
    * @param {String} name
    * @param {Funicular~mountCallback} [mountedCallback] - Gets already mounted or broken carriage.
@@ -293,10 +302,9 @@ class Funicular {
   mount(name, mountedCallback, unmountedCallback) {
     var carriage = new this.Carriage(name);
     var mountedCallback = mountedCallback || ((error) => { throw error; });
-    carriage.unmountedCallback = unmountedCallback;
-    carriage.mount((error) => {
-      mountedCallback(error, carriage);
-    });
+    if (mountedCallback) carriage.mountedCallbacks.push(mountedCallback);
+    if (unmountedCallback) carriage.unmountedCallbacks.push(unmountedCallback);
+    carriage.mount();
   }
   
   /**
@@ -306,6 +314,9 @@ class Funicular {
    * @param {String} name
    * @param {Funicular~mountCallback} [mountedCallback] - Gets already mounted or broken carriage.
    * @param {Funicular~mountCallback} [unmountedCallback] - Gets unmounted carriage.
+   * 
+   * @example
+   * funicular.mountRoot()
    */
   mountRoot(name, mountedCallback, unmountedCallback) {
     var rootId = ++this.lastRootId;

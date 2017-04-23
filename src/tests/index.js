@@ -30,7 +30,7 @@ function generateFunicular(graph = generateGraph()) {
         callback(error);
       });
     }
-    generateChildNamesFromData() {
+    getChildsNames() {
       this.childs = this.data.childs;
     }
   }
@@ -145,17 +145,77 @@ describe('AncientSouls/Funicular', function() {
     var OldCarriage = funicular.Carriage;
     funicular.Carriage = class extends OldCarriage {
       updated(newData) {
-        funicular.mount(this.name, (error, carriage) => {
-          this.moveRoots(carriage);
-          this.remountedCarriage = carriage;
-          carriage.unmountedCallback = this.unmountedCallback;
+        funicular.mount(this.name, (error, newCarriage) => {
+          this.remountedCarriage = newCarriage;
+          newCarriage.mountedCallbacks = this.mountedCallbacks;
+          this.mountedCallbacks = [];
+          newCarriage.unmountedCallbacks = this.unmountedCallbacks;
+          this.moveRoots(newCarriage);
           this.unmount();
+          this.unmountedCallbacks = [];
         });
       }
     };
     funicular.mountRoot('a', (error, a, unmountRoot) => {
       graph.update('a', { $set: { childs: ['b'] } });
     }, (a) => {
+      assert.equal(a.stage, 'unmounted');
+      assert.instanceOf(a.remountedCarriage, Carriage);
+      assert.equal(a.remountedCarriage.stage, 'mounted');
+      done();
+    });
+  });
+  it('multiple maunting processes with one carriage in result', function(done) {
+    var graph = generateGraph();
+    graph.insert({ id: 'a', childs: ['b'] });
+    graph.insert({ id: 'b' });
+    var funicular = generateFunicular(graph);
+    funicular._mount = funicular.mount;
+    funicular.mount = function(name, mountedCallback, unmountedCallback) {
+      var carriage;
+      if (this.carriages[name]) {
+        for (var c in this.carriages[name]) {
+          carriage = this.carriages[name][c];
+        }
+      }
+      if (!carriage) {
+        funicular._mount(...arguments);
+      } else {
+        if (carriage.stage != 'mounted') {
+          if (mountedCallback) carriage.mountedCallbacks.push(mountedCallback);
+        } else mountedCallback(undefined, carriage);
+        if (carriage.stage != 'unmounted') {
+          if (unmountedCallback) carriage.unmountedCallbacks.push(unmountedCallback);
+        }
+      }
+    };
+    var OldCarriage = funicular.Carriage;
+    funicular.Carriage = class extends OldCarriage {
+      unsafeMount(callback) {
+        setTimeout(() => {
+          super.unsafeMount(callback);
+        }, 100);
+      }
+      updated(newData) {
+        this.funicular._mount(this.name, (error, newCarriage) => {
+          this.remountedCarriage = newCarriage;
+          newCarriage.mountedCallbacks = this.mountedCallbacks;
+          this.mountedCallbacks = [];
+          newCarriage.unmountedCallbacks = this.unmountedCallbacks;
+          this.moveRoots(newCarriage);
+          this.unmount();
+          this.unmountedCallbacks = [];
+        });
+      }
+    };
+    var counter = 0;
+    funicular.mountRoot('a', (error, a, unmountRoot) => {
+      counter++;
+    });
+    funicular.mountRoot('a', (error, a, unmountRoot) => {
+      graph.update('a', { $set: { childs: ['b'] } });
+    }, (a) => {
+      assert.equal(counter, 1);
       assert.equal(a.stage, 'unmounted');
       assert.instanceOf(a.remountedCarriage, Carriage);
       assert.equal(a.remountedCarriage.stage, 'mounted');
