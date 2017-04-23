@@ -135,7 +135,13 @@ class Carriage {
    * @param {Carriage~unmountCallback} [callback]
    */
   unmount(callback) {
-    this.unsafeUnmount(callback);
+    if (Object.keys(this._parents).length === 0) {
+      this.unmountChilds(() => {
+        this.unsafeUnmount(callback);
+      });
+    } else if (typeof(callback) == 'function') {
+      callback();
+    }
   }
   
   /**
@@ -154,7 +160,6 @@ class Carriage {
         if (error) nextChild(error);
         else {
           childCarriages.push(carriage);
-          this.tieChild(carriage);
           nextChild();
         }
       });
@@ -165,17 +170,44 @@ class Carriage {
         }, () => {
           callback(error);
         });
-      } else callback();
+      } else {
+        for (var child of childCarriages) {
+          this.tieChild(child);
+        }
+        callback();
+      }
     });
   }
   
   /**
-   * Tie one child with tihs carriage parent.
+   * Tie one child with this carriage parent.
    * @param {Carriage} child
    */
   tieChild(child) {
     this._childs[child.name] = child;
     child._parents[this.name] = this;
+  }
+  
+  /**
+   * Unmount all childs from object in `this._childs`.
+   * @param {Carriage~unmountCallback} [callback]
+   */
+  unmountChilds(callback) {
+    each(this._childs, (child, nextChild) => {
+      this.untieChild(child);
+      child.unmount(() => nextChild());
+    }, () => {
+      callback();
+    });
+  }
+  
+  /**
+   * Untie one child with this carriage parent.
+   * @param {Carriage} child
+   */
+  untieChild(child) {
+    delete this._childs[child.name];
+    delete child._parents[this.name];
   }
 }
 
