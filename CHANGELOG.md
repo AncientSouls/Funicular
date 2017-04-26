@@ -1,66 +1,18 @@
-#### 0.0.30 (2016-9-13)
-
-##### Documentation Changes
-
-* **jsdoc:**
-  * id, source, target can be string|number|string[]|number[] ([f96ac674](https://github.com/AncientSouls/Graph/commit/f96ac674518324043c697cdfe8cfb92caf689ebe))
-  * Import description. ([36500b82](https://github.com/AncientSouls/Graph/commit/36500b82ce3eb3ec544409c14523e90f9893aab2))
-  * ObjectGraph is inherited class. ([d9ca0859](https://github.com/AncientSouls/Graph/commit/d9ca08592226dcb216af2cccd4489385f785c9cf))
-  * ObjectGraph support and jsdoc.json enhanced ([137cb3fd](https://github.com/AncientSouls/Graph/commit/137cb3fd7b00104bbfc22f2b1a04ce78ad84b1bc))
-* **readme:**
-  * Update import. ([7406f96d](https://github.com/AncientSouls/Graph/commit/7406f96d96769feb63a6a45d3fc064ae1bd247af))
-  * Fix readme and logic ([092920c8](https://github.com/AncientSouls/Graph/commit/092920c8e004773996a4bfb4350b256d66d7f145))
-  * new syntax fix ([c2c53f5a](https://github.com/AncientSouls/Graph/commit/c2c53f5ac16b21f1d35906aef9ffe9dae8e2f3e5))
-  * new beautifuls ([ad11882c](https://github.com/AncientSouls/Graph/commit/ad11882c9ecd4ae7e7ff2f5600f8c03425f3c91f))
-  * little console.log fix ([7490e13d](https://github.com/AncientSouls/Graph/commit/7490e13d081764965f508353ec16e9c02ad86bb0))
-  * new format for code and comments ([8ebebed3](https://github.com/AncientSouls/Graph/commit/8ebebed35690e18e9e1f90eb6b9f09a93a6d7126))
+#### 0.0.1 (2017-4-26)
 
 ##### New Features
 
-* **graph:**
-  * graph.get method ([0b1a1167](https://github.com/AncientSouls/Graph/commit/0b1a1167261bd3939f2cf64863bf5c1ea2f60491))
-  * constructor argument config ([7f8c47c6](https://github.com/AncientSouls/Graph/commit/7f8c47c6eeae4f5e292cde71a620b0c0a136dab6))
-  * count method ([1747a4a8](https://github.com/AncientSouls/Graph/commit/1747a4a8eaef4584c2f48f792a5c35e89110d362))
-  * factory for custom class construction ([2a25d0d4](https://github.com/AncientSouls/Graph/commit/2a25d0d4106e65a135ce381e7be45106a9c471b7))
-  * last argument context for custom user data ([9e24adf2](https://github.com/AncientSouls/Graph/commit/9e24adf279f5009090e49d4c5069c3fee1ba50ab))
-  * array push, add, remove operators ([1013834b](https://github.com/AncientSouls/Graph/commit/1013834b8356794504fd2bed9416c3ce500f03df))
-  * Hipergraphs. Support for multiple values in selectors and modifiers. ([4b36d2c0](https://github.com/AncientSouls/Graph/commit/4b36d2c036a07d5e97fc144d2dfafcf4f71b11ef))
-* **adapter:** idGenerator for custom ids in links ([84e0e60e](https://github.com/AncientSouls/Graph/commit/84e0e60eb8f71a6da60384694e8ae47e48e9d5a5))
-* **git:** Move doc into submodule ([451b6420](https://github.com/AncientSouls/Graph/commit/451b6420bd5c1a29f6ad0b4f204c7b9ad5898c97))
-* **scripts:** npm run compile && npm test && npm publish && npm run cleaning && git push ([2fb0c6cb](https://github.com/AncientSouls/Graph/commit/2fb0c6cbf453bee859b30cfe616f402b91520b36))
-* **tests:** Separate complete, imcomplete and empty links tests. ([b3c06f9c](https://github.com/AncientSouls/Graph/commit/b3c06f9cad9b2832c8f13b39c25393a143d3dde7))
-
-##### Bug Fixes
-
-* **adapter:**
-  * in get method callback is not defined ([401c7c14](https://github.com/AncientSouls/Graph/commit/401c7c143b6816e5d4ecd9bac8df91283b25ab1c))
-  * empty array if empty field ([1bfcbe85](https://github.com/AncientSouls/Graph/commit/1bfcbe85e0993d97473508fbd85ac8cc2638280a))
-  * remove event only if removed... ([7f1f8bc9](https://github.com/AncientSouls/Graph/commit/7f1f8bc904c46573155cb753a7e5b719d32fbeae))
-  * remove event only after removing ([b3c96e78](https://github.com/AncientSouls/Graph/commit/b3c96e786e0c74855c340f822117eebea26db7c7))
-  * Catch undefined doc in array. ([9e9029ec](https://github.com/AncientSouls/Graph/commit/9e9029ecbbce38d94d042f90fdec8788a8b63e6e))
-  * Callback optional call ([ef09f31d](https://github.com/AncientSouls/Graph/commit/ef09f31d6261ed576f523528628021c482ef36b5))
-  * Move callback out from try/catch This led to catching the error inside the callback. ([56ee556c](https://github.com/AncientSouls/Graph/commit/56ee556c429cd0ad3b6914c9b2b46ff2528f0a36))
-  * Cleaning and fix query by id result. ([4abf1129](https://github.com/AncientSouls/Graph/commit/4abf1129c8b28dc219b5da0b48936f4ee4eb760b))
-  * Fix document to link generation. ([da90f46d](https://github.com/AncientSouls/Graph/commit/da90f46d762f9662036e56676e24ab44571d63b3))
-* **graph:** ParentClass for main Graph class ([6ce8044b](https://github.com/AncientSouls/Graph/commit/6ce8044b788b871a241eb59688687a8e8c26c801))
-* **jsdoc:**
-  * arguments ([e829c1a2](https://github.com/AncientSouls/Graph/commit/e829c1a251bb459123c172c2416c5b327a303d6f))
-  * syntax ([8792bdc3](https://github.com/AncientSouls/Graph/commit/8792bdc3cd4be3d5e1eb95281e76401f5a6ba6d4))
-  * Restore jsdoc.conf.json file. ([7e358b54](https://github.com/AncientSouls/Graph/commit/7e358b540f384d19be8e414eac6437352a50e75d))
-  * Move jsdoc settings into gh-pages branch. ([a479f12c](https://github.com/AncientSouls/Graph/commit/a479f12cc2c57dd26ee76030141b70b4fdc3d40c))
-* **scripts:**
-  * submodule branch checkout ([05aa2dac](https://github.com/AncientSouls/Graph/commit/05aa2dacb316cd2b812ac64b451bfa872dcaa410))
-  * Add to jsdoc script submodule update. ([b662e463](https://github.com/AncientSouls/Graph/commit/b662e463dcf5835bdba2595191972fdf41ef9a75))
-  * from path to bin names ([59f4b469](https://github.com/AncientSouls/Graph/commit/59f4b469377140ead35112d359b750e61182d573))
-* **compile:** Remove old compiled files. Need to automate these processes... ([bf4a2fd8](https://github.com/AncientSouls/Graph/commit/bf4a2fd80936ce0befa6a3a0b9e3ab9fde978eed))
-* **tests:** Added before preparation. ([ddc15d01](https://github.com/AncientSouls/Graph/commit/ddc15d014b711dcd6d53fd967d865270af00983b))
-* **npm:** Move chai and mocha into main dependencies It is necessary to run tests from other packages. ([10021b6b](https://github.com/AncientSouls/Graph/commit/10021b6bdd03b27ebdfbcbd8a9b2cc11db72710b))
+* **remounting:** Support for remounting when data is updated. ([e364d7c0](https://github.com/AncientSouls/Funicular/commit/e364d7c0eed57e155e112613c15a3bb80b9bef64))
+* **roots:** Mount and unmount root. ([cbb4455d](https://github.com/AncientSouls/Funicular/commit/cbb4455d6f94ab0897245b21fe507c491339282d))
+* **unmount:** Unmount with childs. ([1be647f9](https://github.com/AncientSouls/Funicular/commit/1be647f94f2da0a9f3b0035e9766fbb5fa7fe5a1))
+* **childs:** Safe and unsafe mounting with childs. ([32827552](https://github.com/AncientSouls/Funicular/commit/32827552c0da133ddf97d490edc2f11f40936946))
+* **core:**
+  * Added unmount and unsubscribe logic. ([2250afe4](https://github.com/AncientSouls/Funicular/commit/2250afe4437876c0671995e5cb962b83c1c8b704))
+  * Classes Funicular and Carriage added. ([f56549dc](https://github.com/AncientSouls/Funicular/commit/f56549dc0d51aba62df383045c9478e5b7c1e398))
 
 ##### Other Changes
 
-* **adapter:** _idGenerator && _insertModifier && _updateModifier && skip && limit && sort ([6260cc68](https://github.com/AncientSouls/Graph/commit/6260cc68a56101fe54f357b25a9a49d7b7ce2ec9))
-
-##### Refactors
-
-* **export:** Export in separate line. ([007ba44f](https://github.com/AncientSouls/Graph/commit/007ba44f2fba8032eafc0b837910f4de2d15692e))
+* **jsdoc:**
+  * Describe mountChilds and tieChild method. ([244860bd](https://github.com/AncientSouls/Funicular/commit/244860bdf7ca5f11aa0a00a8d2864fc3f2f02459))
+  * Currect support. ([7f18fda1](https://github.com/AncientSouls/Funicular/commit/7f18fda108a7e9542c4e99d03ce4b413d65e63d8))
 

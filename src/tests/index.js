@@ -25,13 +25,15 @@ function generateFunicular(graph = generateGraph()) {
       var removeStop = graph.on('remove', (oldData, newData) => {
         if (newData.id == this.name) this.removed();
       });
-      graph.get(this.name, undefined, (error, data) => {
+      graph.get(this.query, undefined, (error, data) => {
+        this.name = data.id;
         this.fetched(error, data);
         callback(error);
       });
     }
-    getChildsNames() {
+    getChildsQueries(callback) {
       this.childs = this.data.childs;
+      callback();
     }
   }
   
@@ -45,7 +47,7 @@ describe('AncientSouls/Funicular', function() {
   it('new funicular.Carriage', function() {
     var funicular = generateFunicular();
     var a = new funicular.Carriage('a');
-    assert.deepProperty(funicular, 'carriages.a.'+a.id);
+    assert.notDeepProperty(funicular, 'carriages.a.'+a.id);
   });
   it('funicular.mount', function(done) {
     var graph = generateGraph();

@@ -15,77 +15,22 @@ npm install --save ancient-funicular
 
 ### Lifecycle
 
-Any carriage goes through some stages of life:
-
-#### Mounting
-
-##### `funicular.mountRoot`
-
-Starts the mounting of the root carriage.
-
-Child carriages will be automatically assigned.
-
-##### `funicular.mount`
-
-A common method for a funicular to mount a new carriage.
-
-Universal mount point for all carriages.
-
-> Attention! Not for external usage.
-
-##### `construct`
-
-Carriages automatically constructs in funicular `mount` function.
-
-At this point, the carriage is registered in the list of all existing carriages in `funicular.carriages`.
-
-> Attention! Not for external usage.
-
-##### `carriage.mount`
-
-* `carriage.subscribe` - Getting necessary data by name, subscribing to them. **you must override it**
-* `carriage.getChildsNames` - Getting child names array from gotted data. **you must override it**
-* `carriage.mountChilds` - Mounting all childs from gotted data.
-* `carriage.unsafeMount` - Any necessary actions for your custom mounting logic. **you can override it**
-
-> Attention! Not for external usage.
-
-### Updating
-
-By default, update event just call `carriage.updated` method, with `carriage.data` reset, but you can override it for anything else.
-
-For example you can use this code, for mount new carriage and unmount old, on easy updated event.
-
-```js
-var OldCarriage = funicular.Carriage;
-funicular.Carriage = class extends OldCarriage {
-  updated(newData) {
-    funicular.mount(this.name, (error, newCarriage) => {
-      this.remountedCarriage = newCarriage;
-      newCarriage.mountedCallbacks = this.mountedCallbacks;
-      this.mountedCallbacks = [];
-      newCarriage.unmountedCallbacks = this.unmountedCallbacks;
-      this.moveRoots(newCarriage);
-      this.unmount();
-      this.unmountedCallbacks = [];
-    });
-  }
-};
-```
-
-### Unmounting
-
-Carriages can not be unmounted while it has parents. It is necessary to unmount the parents first.
-To unmount root, you should use `unmountRoot` argument from callback in `Funicular#mountRoot`.
-
-##### `carriage.unmount`
-
-* `carriage.unmountChilds` - Unmounting all childs from `carriage._childs`.
-* `carriage.unsafeUnmount` - Unregister from list of carriages, mark starge `unmounted`, and any necessary actions for your custom mounting logic. **you can override it**
-* `carriage.unsubscribe` - Run function setted in ovverided subscribe method.
-* `carriage.unmountedCallbacks` - All callback handles unmount this carriage.
-
-> Attention! Not for external usage.
+* [`funicular.mountRoot(query, mountedCallback, unmountedCallback)`](https://ancientsouls.github.io/Funicular/Funicular.html#mountRoot)
+  * [`funicular.mount(query, mountedCallback, unmountedCallback)`](https://ancientsouls.github.io/Funicular/Funicular.html#mount)
+    * [`var carriage. = new funicular.Carriage(query)`](https://ancientsouls.github.io/Funicular/Carriage.html)
+    * [`carriage.mount()`](https://ancientsouls.github.io/Funicular/Carriage.html#mount)
+      * [`carriage.subscribe(callback)`](https://ancientsouls.github.io/Funicular/Carriage.html#subscribe) **to override**
+        * [`carriage.getChildsQueries(callback)`](https://ancientsouls.github.io/Funicular/Carriage.html#getChildsQueries) **to override**
+          * [`carriage.mountChilds(callback)`](https://ancientsouls.github.io/Funicular/Carriage.html#mountChilds)
+            * [`carriage.unsafeMount(callback)`](https://ancientsouls.github.io/Funicular/Carriage.html#unsafeMount) **to override**
+              * `carriage.mountedCallbacks` call all mount callback handlers of this carriage setted from multiple mounts
+* [`carriage.updated()`](https://ancientsouls.github.io/Funicular/Carriage.html#updated) **to override**
+* [`unmountRoot()`](https://ancientsouls.github.io/Funicular/Carriage.html#mountRoot)
+  * [`carriage.unmount(callback)`](https://ancientsouls.github.io/Funicular/Carriage.html#unmount)
+    * [`carriage.unmountChilds(callback)`](https://ancientsouls.github.io/Funicular/Carriage.html#unmountChilds)
+      * [`carriage.unsafeUnmount(callback)`](https://ancientsouls.github.io/Funicular/Carriage.html#unsafeUnmount) **to override**
+        * [`carriage.unsubscribe(callback)`](https://ancientsouls.github.io/Funicular/Carriage.html#subscribe) **to override**
+        * `carriage.unmountedCallbacks` call all unmount callback handlers of this carriage setted from multiple mounts
 
 ### Carriage
 Capsule for data.
@@ -97,12 +42,12 @@ Has several states in the stage:
  * `mounted` - Mounted.
  * `unmounted` - Unmounted.
 
-All children are mounted and unmounted themselves if the `Carriage#getChildsNames` function is described correctly.
+All children are mounted and unmounted themselves if the `Carriage#getChildsQueries` function is described correctly.
 For manually mount carriage with root maintaining, need to use methods `Funicular#mountRoot` and `unmountRoot` argument in callback.
 
 #### parents
 
-Other carriages, with childs. If method `Carriage#getChildsNames` is described correctly, 
+Other carriages, with childs. If method `Carriage#getChildsQueries` is described correctly, 
 
 ## Example
 
@@ -129,13 +74,15 @@ funicular.Carriage = class extends OldCarriage {
     var removeStop = collection.on('remove', (oldData, newData) => {
       if (newData.id == this.name) this.removed();
     });
-    collection.get(this.name, undefined, (error, data) => {
+    collection.get(this.query, undefined, (error, data) => {
+      this.name = data.id;
       this.fetched(error, data);
       callback(error);
     });
   }
-  getChildsNames() {
+  getChildsQueries(callback) {
     this.childs = this.data.childs;
+    callback();
   }
 }
 
