@@ -4,224 +4,293 @@ import { assert } from 'chai';
 import Funicular, { Carriage } from '../lib';
 import { ObjectGraph } from 'ancient-graph';
 import async from 'async';
+import each from 'async/each';
 
-function generateGraph(collection = []) {
-  return new ObjectGraph(collection, { id: 'id', childs: 'childs', });
-};
-
-function generateFunicular(graph = generateGraph()) {
+var generateFunicular = (memory) => {
   var funicular = new Funicular();
-  
-  var OldCarriage = funicular.Carriage;
-  funicular.Carriage = class extends OldCarriage {
-    subscribe(callback) {
-      this.unsubscribe = () => {
-        updateStop();
-        removeStop();
-      };
-      var updateStop = graph.on('update', (oldData, newData) => {
-        if (newData.id == this.name) this.updated(newData);
-      });
-      var removeStop = graph.on('remove', (oldData, newData) => {
-        if (newData.id == this.name) this.removed();
-      });
-      graph.get(this.query, undefined, (error, data) => {
-        this.name = data.id;
-        this.fetched(error, data);
-        callback(error);
-      });
+  funicular.Carriage = class extends funicular.Carriage {
+    childDidRemount(unmountError, oldChild, mountError, newChild) {
+      if (this.data.childRemount) {
+        this.remount();
+      }
     }
-    getChildsQueries(callback) {
-      this.childs = this.data.childs;
-      callback();
+    enable(callback) {
+      if (this.data.childs) {
+        each(this.data.childs, (child, next) => {
+          this.mountChild(child, memory[child], (error) => {
+            next(error); 
+          });
+        }, (error) => {
+          if (error) {
+            this.error = new Error('Broken child.');
+            each(this.childs, (child, next) => {
+              child.unmount();
+            }, () => {
+              callback();
+            });
+          } else {
+            // Useful work.
+            callback();   
+          }
+        });
+      } else callback();
     }
   }
-  
   return funicular;
-}; 
+}
 
-describe('AncientSouls/Funicular', function() {
-  it('new Funicular', function() {
-    generateFunicular();
-  });
-  it('new funicular.Carriage', function() {
-    var funicular = generateFunicular();
-    var a = new funicular.Carriage('a');
-    assert.notDeepProperty(funicular, 'carriages.a.'+a.id);
-  });
-  it('funicular.mount', function(done) {
-    var graph = generateGraph();
-    graph.insert({ id: 'a' });
-    var funicular = generateFunicular(graph);
-    funicular.mount('a', (error, a) => {
-      assert.ifError(error);
-      assert.instanceOf(a, Carriage);
-      assert.deepProperty(a, 'data.id');
-      assert.equal(a.data.id, 'a');
-      assert.equal(a.stage, 'mounted');
-      done();
-    });
-  });
-  it('funicular.mount with childs', function(done) {
-    var graph = generateGraph();
-    graph.insert({ id: 'a', childs: ['b'] });
-    graph.insert({ id: 'b' });
-    var funicular = generateFunicular(graph);
-    funicular.mount('a', (error, a) => {
-      assert.ifError(error);
-      assert.instanceOf(a, Carriage);
-      assert.deepProperty(a, 'data.id');
-      assert.equal(a.data.id, 'a');
-      assert.equal(a.stage, 'mounted');
-      assert.deepProperty(a, '_childs.b');
-      assert.instanceOf(a._childs.b, Carriage);
-      assert.deepProperty(a, '_childs.b._parents.a');
-      assert.equal(a._childs.b._parents.a, a);
-      assert.equal(a._childs.b.stage, 'mounted');
-      done();
-    });
-  });
-  it('carriage.unmount', function(done) {
-    var graph = generateGraph();
-    graph.insert({ id: 'a' });
-    var funicular = generateFunicular(graph);
-    funicular.mount('a', (error, a) => {
-      a.unmount(() => {
-        assert.notDeepProperty(funicular, 'carriages.a.'+a.id);
-        assert.equal(a.stage, 'unmounted');
-        done();
-      });
-    });
-  });
-  it('carriage.unmount with childs', function(done) {
-    var graph = generateGraph();
-    graph.insert({ id: 'a', childs: ['b'] });
-    graph.insert({ id: 'b' });
-    var funicular = generateFunicular(graph);
-    funicular.mount('a', (error, a) => {
-      var b = a._childs.b;
-      a.unmount((error) => {
+describe('AncientSouls/Funicular', () => {
+  it('mount remount unmount', (done) => {
+    var memory = {
+      a: { },
+    };
+    
+    var funicular = generateFunicular(memory);
+    
+    funicular.mount('a', memory.a,
+      (error, a) => {
         assert.ifError(error);
-        assert.notDeepProperty(funicular, 'carriages.a.'+a.id);
-        assert.notDeepProperty(funicular, 'carriages.b.'+b.id);
-        assert.equal(a.stage, 'unmounted');
-        assert.equal(b.stage, 'unmounted');
-        done();
-      });
-    });
-  });
-  it('carriage.mountRoot and unmountRoot', function(done) {
-    var graph = generateGraph();
-    graph.insert({ id: 'a', childs: ['b'] });
-    graph.insert({ id: 'b' });
-    var funicular = generateFunicular(graph);
-    funicular.mountRoot('a', (error, a, unmountRootA) => {
-      var b = a._childs.b;
-      a.unmount((error) => {
-        assert.ifError(error);
-        assert.instanceOf(a, Carriage);
-        assert.deepProperty(a, 'data.id');
-        assert.equal(a.data.id, 'a');
+        
+        assert.equal(a.id, 1);
+        
         assert.equal(a.stage, 'mounted');
-        assert.deepProperty(a, '_childs.b');
-        assert.instanceOf(a._childs.b, Carriage);
-        assert.deepProperty(a, '_childs.b._parents.a');
-        assert.equal(a._childs.b._parents.a, a);
-        assert.equal(a._childs.b.stage, 'mounted');
-        unmountRootA((error) => {
+        
+        assert.deepProperty(funicular.namedCarriages, `a.1`);
+        
+        a.remount();
+      },
+      (unmountError, olda, mountError, newa) => {
+        assert.notEqual(olda, newa);
+        
+        assert.equal(olda.id, 1);
+        assert.equal(newa.id, 2);
+        
+        assert.equal(olda.stage, 'unmounted');
+        assert.equal(newa.stage, 'mounted');
+        
+        assert.ifError(unmountError);
+        assert.ifError(mountError);
+        
+        assert.notDeepProperty(funicular.namedCarriages, `a.1`);
+        assert.deepProperty(funicular.namedCarriages, `a.2`);
+        
+        newa.unmount();
+      },
+      (error, a) => {
+        assert.ifError(error);
+        
+        assert.equal(a.id, 2);
+        
+        assert.equal(a.stage, 'unmounted');
+        
+        assert.notDeepProperty(funicular.namedCarriages, `a.2`);
+        
+        done()
+      }
+    );
+  });
+  it('one parent with child', (done) => {
+    var memory = {
+      a: {  childs: ['b'] },
+      b: { },
+    };
+    
+    var funicular = generateFunicular(memory);
+    
+    funicular.mount('a', memory.a,
+      (error, a) => {
+        assert.ifError(error);
+        
+        assert.equal(a.id, 1);
+        assert.equal(a.childs.b.id, 2);
+        
+        assert.equal(a.stage, 'mounted');
+        assert.equal(a.childs.b.stage, 'mounted');
+        
+        assert.deepProperty(funicular.namedCarriages, `a.1`);
+        assert.deepProperty(funicular.namedCarriages, `b.2`);
+        
+        a.remount();
+      },
+      (unmountError, olda, mountError, newa) => {
+        assert.ifError(unmountError);
+        assert.ifError(mountError);
+          
+        assert.notDeepProperty(olda, `.childs.b`);
+        
+        assert.equal(olda.id, 1);
+        assert.equal(newa.id, 3);
+        assert.equal(newa.childs.b.id, 2);
+        
+        assert.equal(olda.stage, 'unmounted');
+        assert.equal(newa.stage, 'mounted');
+        assert.equal(newa.childs.b.stage, 'mounted');
+        
+        assert.notDeepProperty(funicular.namedCarriages, `a.1`);
+        assert.deepProperty(funicular.namedCarriages, `a.3`);
+        assert.deepProperty(funicular.namedCarriages, `b.2`);
+        
+        newa.unmount();
+      },
+      (error, a) => {
+        assert.ifError(error);
+        
+        assert.equal(a.id, 3);
+        
+        assert.equal(a.stage, 'unmounted');
+        
+        assert.notDeepProperty(funicular.namedCarriages, `b.2`);
+        assert.notDeepProperty(funicular.namedCarriages, `a.3`);
+        
+        done();
+      }
+    );
+  });
+  it('one with parent and unnamed parent', (done) => {
+    var memory = {
+      a: {  childs: ['b'] },
+      b: { },
+    };
+    
+    var funicular = generateFunicular(memory);
+    
+    funicular.mount(undefined, { childs: ['b'] }, (error, root) => {
+      assert.ifError(error);
+      
+      assert.equal(root.id, 1);
+      assert.equal(root.childs.b.id, 2);
+        
+      assert.equal(root.stage, 'mounted');
+      assert.equal(root.childs.b.stage, 'mounted');
+      
+      assert.deepProperty(funicular.unnamedCarriages, `1`);
+      assert.deepProperty(funicular.namedCarriages, `b.2`);
+      assert.deepProperty(funicular.namedCarriages, `b.0`);
+      
+      funicular.mount('a', memory.a,
+        (error, a) => {
           assert.ifError(error);
-          assert.notDeepProperty(funicular, 'carriages.a.'+a.id);
-          assert.notDeepProperty(funicular, 'carriages.b.'+b.id);
+          
+          assert.equal(a.id, 3);
+          assert.equal(a.childs.b.id, 2);
+          
+          assert.equal(a.stage, 'mounted');
+          assert.equal(a.childs.b.stage, 'mounted');
+          
+          assert.deepProperty(funicular.namedCarriages, `a.3`);
+          assert.deepProperty(funicular.namedCarriages, `b.2`);
+          
+          a.remount();
+        },
+        (unmountError, olda, mountError, newa) => {
+          assert.ifError(unmountError);
+          assert.ifError(mountError);
+          
+          assert.notDeepProperty(olda, `.childs.b`);
+          
+          assert.equal(olda.id, 3);
+          assert.equal(newa.id, 4);
+          assert.equal(newa.childs.b.id, 2);
+          
+          assert.equal(olda.stage, 'unmounted');
+          assert.equal(newa.stage, 'mounted');
+          assert.equal(newa.childs.b.stage, 'mounted');
+          
+          assert.notDeepProperty(funicular.namedCarriages, `a.3`);
+          assert.deepProperty(funicular.namedCarriages, `a.4`);
+          assert.deepProperty(funicular.namedCarriages, `b.2`);
+          
+          newa.unmount();
+        },
+        (error, a) => {
+          assert.ifError(error);
+          
+          assert.equal(a.id, 4);
+          
           assert.equal(a.stage, 'unmounted');
-          assert.equal(b.stage, 'unmounted');
+          
+          assert.notDeepProperty(funicular.namedCarriages, `a.3`);
+          assert.deepProperty(funicular.namedCarriages, `b.2`);
+          
+          root.unmount();
+        }
+      );
+    }, null, (error, root) => {
+      assert.ifError(error);
+      
+      assert.equal(root.id, 1);
+      
+      assert.equal(root.stage, 'unmounted');
+      
+      assert.notDeepProperty(funicular.unnamedCarriages, `1`);
+      assert.notDeepProperty(funicular.namedCarriages, `b.2`);
+      
+      done();
+    });
+  });
+  it('childs remount and unmount handlers', (done) => {
+    var memory = {
+      a: {  childs: ['b'], childRemount: true },
+      b: { },
+    };
+    
+    var funicular = generateFunicular(memory);
+    
+    funicular.mount(undefined, { childs: ['b'] }, (error, root) => {
+      funicular.mount('a', memory.a,
+        (error, a) => {
+          assert.ifError(error);
+          a.childs.b.remount();
+        },
+        (unmountError, olda, mountError, newa) => {
+          assert.ifError(unmountError);
+          assert.ifError(mountError);
+          
+          assert.notDeepProperty(olda, `.childs.b`);
+          
+          assert.equal(olda.id, 3);
+          assert.equal(newa.id, 5);
+          assert.equal(newa.childs.b.id, 4);
+          
+          assert.equal(olda.stage, 'unmounted');
+          assert.equal(newa.stage, 'mounted');
+          assert.equal(newa.childs.b.stage, 'mounted');
+          
+          assert.notDeepProperty(funicular.namedCarriages, `a.3`);
+          assert.notDeepProperty(funicular.namedCarriages, `b.2`);
+          assert.deepProperty(funicular.namedCarriages, `a.5`);
+          assert.deepProperty(funicular.namedCarriages, `b.4`);
+          
+          root.unmount();
+        },
+        (error, a) => {
+          assert.ifError(error);
+          
+          assert.equal(a.id, 5);
+          
+          assert.equal(a.stage, 'unmounted');
+          
+          assert.notDeepProperty(funicular.namedCarriages, `a.5`);
+          assert.notDeepProperty(funicular.namedCarriages, `b.4`);
+          
           done();
-        });
-      });
-    });
-  });
-  it('update with remaunting', function(done) {
-    var graph = generateGraph();
-    graph.insert({ id: 'a', childs: ['b'] });
-    graph.insert({ id: 'b' });
-    var funicular = generateFunicular(graph);
-    var OldCarriage = funicular.Carriage;
-    funicular.Carriage = class extends OldCarriage {
-      updated(newData) {
-        funicular.mount(this.name, (error, newCarriage) => {
-          this.remountedCarriage = newCarriage;
-          newCarriage.mountedCallbacks = this.mountedCallbacks;
-          this.mountedCallbacks = [];
-          newCarriage.unmountedCallbacks = this.unmountedCallbacks;
-          this.moveRoots(newCarriage);
-          this.unmount();
-          this.unmountedCallbacks = [];
-        });
-      }
-    };
-    funicular.mountRoot('a', (error, a, unmountRoot) => {
-      graph.update('a', { $set: { childs: ['b'] } });
-    }, (a) => {
-      assert.equal(a.stage, 'unmounted');
-      assert.instanceOf(a.remountedCarriage, Carriage);
-      assert.equal(a.remountedCarriage.stage, 'mounted');
-      done();
-    });
-  });
-  it('multiple maunting processes with one carriage in result', function(done) {
-    var graph = generateGraph();
-    graph.insert({ id: 'a', childs: ['b'] });
-    graph.insert({ id: 'b' });
-    var funicular = generateFunicular(graph);
-    funicular._mount = funicular.mount;
-    funicular.mount = function(name, mountedCallback, unmountedCallback) {
-      var carriage;
-      if (this.carriages[name]) {
-        for (var c in this.carriages[name]) {
-          carriage = this.carriages[name][c];
         }
-      }
-      if (!carriage) {
-        funicular._mount(...arguments);
-      } else {
-        if (carriage.stage != 'mounted') {
-          if (mountedCallback) carriage.mountedCallbacks.push(mountedCallback);
-        } else mountedCallback(undefined, carriage);
-        if (carriage.stage != 'unmounted') {
-          if (unmountedCallback) carriage.unmountedCallbacks.push(unmountedCallback);
-        }
-      }
-    };
-    var OldCarriage = funicular.Carriage;
-    funicular.Carriage = class extends OldCarriage {
-      unsafeMount(callback) {
-        setTimeout(() => {
-          super.unsafeMount(callback);
-        }, 100);
-      }
-      updated(newData) {
-        this.funicular._mount(this.name, (error, newCarriage) => {
-          this.remountedCarriage = newCarriage;
-          newCarriage.mountedCallbacks = this.mountedCallbacks;
-          this.mountedCallbacks = [];
-          newCarriage.unmountedCallbacks = this.unmountedCallbacks;
-          this.moveRoots(newCarriage);
-          this.unmount();
-          this.unmountedCallbacks = [];
-        });
-      }
-    };
-    var counter = 0;
-    funicular.mountRoot('a', (error, a, unmountRoot) => {
-      counter++;
-    });
-    funicular.mountRoot('a', (error, a, unmountRoot) => {
-      graph.update('a', { $set: { childs: ['b'] } });
-    }, (a) => {
-      assert.equal(counter, 1);
-      assert.equal(a.stage, 'unmounted');
-      assert.instanceOf(a.remountedCarriage, Carriage);
-      assert.equal(a.remountedCarriage.stage, 'mounted');
-      done();
+      );
+    }, () => {
+      throw new Error('this is wrong');
+    }, (error, root) => {
+      assert.ifError(error);
+      
+      assert.equal(root.id, 1);
+      
+      assert.equal(root.stage, 'unmounted');
+      
+      assert.notDeepProperty(funicular.unnamedCarriages, `1`);
+      
+      assert.deepProperty(funicular.namedCarriages, `a.5`);
+      assert.deepProperty(funicular.namedCarriages, `b.4`);
+      
+      funicular.namedCarriages.a[5].unmount();
     });
   });
 });
