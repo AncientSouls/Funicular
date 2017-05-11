@@ -322,9 +322,7 @@ class Carriage {
    * @param [mountError]
    * @param {Carriage} [newCarriage]
    */
-  shouldRemount(unmountError, olda, mountError, newa) {
-    return false;
-  }
+  childDidRemount(unmountError, olda, mountError, newa) {}
 }
 
 export default Carriage;

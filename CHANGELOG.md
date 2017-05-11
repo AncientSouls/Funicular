@@ -1,7 +1,8 @@
-#### 1.0.1 (2017-5-11)
+#### 1.0.2 (2017-5-11)
 
 ##### Cleaning
 
+* **jsdoc** `childDidRemount` description.
 * **dependencies** Remove any dependencies from production.
 
 #### 1.0.0 (2017-5-11)
