@@ -1,4 +1,3 @@
-import each from 'async/each';
 import Carriage from './carriage';
 
 /**

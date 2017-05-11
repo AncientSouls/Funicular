@@ -1,5 +1,3 @@
-import each from 'async/each';
-
 /**
  * Universal basic carriage for funicular.
  * @memberof ancient-funicular

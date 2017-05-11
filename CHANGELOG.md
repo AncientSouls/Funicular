@@ -1,3 +1,9 @@
+#### 1.0.1 (2017-5-11)
+
+##### Cleaning
+
+* **dependencies** Remove any dependencies from production.
+
 #### 1.0.0 (2017-5-11)
 
 ##### New Features

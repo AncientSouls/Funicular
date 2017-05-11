@@ -1,6 +1,6 @@
 {
   "name": "ancient-funicular",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Just async mounting, updating and unmounting hierarchical carriages.",
   "keywords": [
     "javascript",
@@ -33,10 +33,8 @@
     "lib": "lib",
     "test": "tests"
   },
-  "dependencies": {
-    "async": "^2.3.0"
-  },
   "devDependencies": {
+    "async": "^2.3.0",
     "chai": "^3.5.0",
     "mocha": "^2.5.3",
     "babel-cli": "^6.14.0",
