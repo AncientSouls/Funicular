@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/ancient-funicular.svg)](https://badge.fury.io/js/ancient-funicular)
 [![Join the chat at https://gitter.im/AncientSouls/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/AncientSouls/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Executions with mount, unmount and update logics.
+Just async mounting, updating and unmounting hierarchical items.
 
 ## Install
 
@@ -13,14 +13,28 @@ npm install --save ancient-funicular
 
 ## Theory
 
-The carriage represents the period of life of some data. Coaches are named and not named. Unnamed carriages serve as the roots of a mointing tree. There can be as many as you need. Named carriages try to be unique.
+[`Item`](https://ancientsouls.github.io/Funicular/Item.html) class represents the period of life of some data. Items are exists with name (`named`) and without name (`unnamed`). Unnamed items serve as the roots of a mointing tree. There can be as many as you need. Named items try to be unique and stores into `manager._items` by their unique names.
 
-To work with the carriages, it is necessary to prepare a class for `Funicular` and class `Carriage`.
-You must override methods `enable` and` disable` in `Carriage`, that would describe what in your application means mount and unmount data.
+To work with the items, need instance of class[`Manager`](https://ancientsouls.github.io/Funicular/Manager.html) and your custom extended class [`Item`](https://ancientsouls.github.io/Funicular/Item.html).
+You must override methods [`preparation`](https://ancientsouls.github.io/Funicular/Item.html#preparation), [`item.mounting`](https://ancientsouls.github.io/Funicular/Item.html#mounting), [`item.unmounting`](https://ancientsouls.github.io/Funicular/Item.html#unmounting) in [`Item`](https://ancientsouls.github.io/Funicular/Item.html), that would describe what in your application means mount and unmount data.
+
+## Lifecycle
+
+Any mount/unmount process consists of these steps:
+
+* [`manager.get`](https://ancientsouls.github.io/Funicular/Manager.html#get) Universal getter of items. 
+    * [`item.prepare`](https://ancientsouls.github.io/Funicular/Item.html#prepare) - Start sequence of loading of this data and childs queries.
+        * [`item.mount`](https://ancientsouls.github.io/Funicular/Item.html#mount) - Start sequence of needed actions for run, start, mount, execute and so on...
+* [`item.remount](https://ancientsouls.github.io/Funicular/Item.html#remount) - Mount new active item with equal name any may be other query, and then unmount current item.
+  * [`item.mount`](https://ancientsouls.github.io/Funicular/Item.html#mount) - Start sequence of needed actions for run, start, mount, execute and so on...
+      * [`item.unmount`](https://ancientsouls.github.io/Funicular/Item.html#unmount) - Start sequence of needed actions forForget, stop, turn off and so on...
+* [`item.unmount`](https://ancientsouls.github.io/Funicular/Item.html#unmount) - Start sequence of needed actions forForget, stop, turn off and so on...
+
+## Examples
 
 ```js
-import NativeFunicular from 'ancient-funicular';
-import async from 'async';
+import { Manager, Item } from 'ancient-funicular';
+import { each } from 'async';
 
 var memory = {
   a: { childs: ['b'] },
@@ -61,63 +75,109 @@ class Funicular extends NativeFunicular {
   }
 }
 
-var funicular = new Funicular();
+class CustomItem extends Item {
+  preparation(callback) {
+    if (this.name) this.data = memory[this.name];
+    else if (this.query) this.data = this.query;
+    
+    for (var c in this.data.childs) {
+      this.prepareChild(this.data.childs[c]);
+    }
+    this.exports = {};
+    this.prepared(undefined, callback);
+  },
+  mounting(callback) {
+    each(this.childs, (child, next) => {
+      this.mountChild(child, () => {
+        next();
+      });
+    }, () => {
+      this.exports = this.data;
+      this.mounted(undefined, callback);
+    });
+  },
+  unmounting(callback) {
+    for (var c in this.childs) {
+      this.childs[c].unmount();
+    }
+    this.unmounted(undefined, callback);
+  }
+}
+
+var manager = new Manager(CustomItem);
 ```
 
-Any coach is created and tracked using the `funicular.mount`. Named carriages will not be mount again, they will be taken from memory. If carriage no longer matches the actual data, you can use `this.remount` from `enable` method. It mount new carriage of this name, and mark previously version of carriage as invalid.
-Any unmounting occurs by calling `carriage.unmount`. Calling to `carriage.unmount` does not mean that it does happen.
-This means that the coach will check whether there are other dependent parental carriage, and only if they are not exists, unmount self. If the carriage is unmount, it tries to unmount all her children. If childs do not have other parents, they too will be unmounted.
+Any item can be tracked using events. Support events almost clearly described here:
 
 ```js
-funicular.mount('a', memory.a,
-  // mountedCallback - Calls after this carriage fully mounted with childs.
-  (error, a) => {
-    a.id // 1
-    a.unique() // true
+manager.get('a')
+  .on('prepared', (error, item, event) => item.mount(() => {
+    console.log('already mounted or just mounted, calls once');
+  }))
+  .on('mounted', (error, item, event) => item.remount(item.query, () => {
+    console.log('just remounted once');
+  }))
+  .on('remounted', (unmountError, oldItem, mountError, newItem, event) => newItem.unmount(() => {
+    console.log('just unmounted once');
+  }))
+  .on('unmounted', (error, item, event) => console.log('just fully unmounted, without remounting'))
+  .prepare((error, item) => console.log('just prepared, calls once'))
+```
+
+Method `on` reacts to real events, but methods as `prepare`, `mount`, `remount`, `unmount` call callback anyway. If item already prepared, and you call .prepare with callback, it be it will be called immediately.
+Any unmounting occurs by calling `item.unmount`. Calling to `item.unmount` does not mean that it does happen.
+This means that the item will check whether there are other dependent parental item, and only if they are not exists, unmount self. If the carriage is unmount, it tries to unmount all her children. If childs do not have other parents, they too will be unmounted.
+
+```js
+manager.get('a', memory.a)
+  .prepare((error, a) => {
+    a.isPrepared; // true
+    a.childs.b.isPrepared; // true
     
-    a.childs.b // Contains mounted b carriage.
-    a.childs.b.id // 2
+    a.data == memory.a; // true
+    a.childs.b; // Contains mounted b carriage.
+    a.childs.b.data == memory.b; // true
     
-    funicular.namedCarriages.a[1] == a // true
-    funicular.namedCarriages.b[2] == a.childs.b // true
+    manager._items.a == a; // true
+    manager._items.b == a.childs.b; // true
     
     // We can try to unmount child, but it not work if parents still mounted.
     a.childs.b.unmount();
     
-    a.remount();
-  },
-  // remountedCallback - Calls when called remount method, new carriage fully mounted and old carriage fully unmounted.
-  (unmountError, olda, mountError, newa) => {
-    olda.id // 1
-    olda.unique() // false
-    newa.id // 3
-    newa.unique() // true
-    
-    olda.childs // After old carriage is unmounted, childs object clears.
-    newa.childs.b // New carriage contains mounted b carriage too.
-    newa.childs.b.id // 2 // Child not remount when parent is remounted.
-    
-    funicular.namedCarriages.a[1] // undefined
-    funicular.namedCarriages.a[3] == newa // true
-    funicular.namedCarriages.b[2] == newa.childs.b // true
-    
-    a.unmount(); // Unmount this parent with all childs if they not have other parents.
-  },
-  // unmountedCallback - Calls after this carriage fully unmunted (not remounted but namely unmounted)
-  (error, a) => {
-    a.id // 3
-    a.childs // After unmounted, childs object clears.
-    
-    funicular.namedCarriages.a[1] // undefined
-    funicular.namedCarriages.a[3] // undefined
-    funicular.namedCarriages.b[2] // undefined
-    
-    // All cariages are unmounted.
-  }
-);
+    a.mount((error, a) => {
+      a.isMounted; // true
+      a.childs.b.isMounted; // true
+      
+      a.exports == a.data; // true
+      a.childs.b.exports == a.childs.b.data; // true
+      
+      // Remount parent a item, just creates new item `a` with new hierarchy of childs.
+      a.remount(a.query, (unmountError, olda, mountError, newa) => {
+        olda == a; // true
+        newa == a; // false
+        
+        olda.isUnmounted; // true
+        olda.childs.b.isUnmounted; // true
+        
+        newa.isMounted // true
+        newa.childs.b.isMounted // true remounted.
+        
+        // Unmount this parent with all childs if they not have other parents.
+        a.unmount((error, a) => {
+          a == newa; // true
+          
+          a.isUnmounted; // true
+          a.childs.b.isUnmounted // true
+          
+          manager._items.a; // undefined
+          manager._items.b; // undefined
+        });
+      });
+    });
+  });
 ```
 
-In practice, it can be very useful to use unnamed carriages, which can also act as parents to other carriages, but can not be child of other carriages. Since the same class of `Carriage` is applied to it, data can be transmitted to it in the same form.
+In practice, it can be very useful to use unnamed items, which can also act as parents to other items, but can not be child of other carriages. Since the same class of `Item` is applied to it, data can be transmitted to it in the same form.
 
 ```js
 var memory = {
@@ -125,87 +185,37 @@ var memory = {
   b: {},
 };
 
-var funicular = new Funicular();
+var manager = new Manager(CustomItem);
 
-funicular.mount(undefined, { childs: ['a'] },
-  (error, root) => {
-    root.id // 1
-    root.childs.a.id // 2
-    root.childs.a.childs.b.id // 3
+manager.get(undefined, { childs: ['a'] })
+  .prepare((error, root) => {
+    Object.keys(manager._items).length; // 1
+    manager._items.b.data == memory.b; // true
     
-    funicular.unnamedCarriages[1] == this // true
+    root.isPrepared; // true
+    root.child.b.isPrepared; // true
     
-    this.remount();
-  },
-  (unmountError, oldRoot, mountError, newRoot) => {
-    oldRoot.id // 1
-    newRoot.id // 4
-    
-    newRoot.childs.a.id // 2
-    newRoot.childs.a.childs.b.id // 3
-    
-    funicular.unnamedCarriages[1] // undefined
-    funicular.unnamedCarriages[4] == this // true
-    
-    newRoot.unmount();
-  },
-  (error, root) => {
-    root.id // 4
-    
-    funicular.unnamedCarriages[4] // undefined
-  }
-);
+    root.mount((error, root) => {
+      root.isMounted; // true
+      root.child.b.isMounted; // true
+      
+      root.remount((unmountError, olda, mountError, newa) => {
+        olda.isUnmounted; // true
+        olda.child.b.isUnmounted; // true
+        
+        newa.isMounted; // true
+        newa.child.b.isMounted; // true
+        
+        newa.unmount((error, root) => {
+          root.isUnmounted; // true
+          root.child.b.isUnmounted; // true
+          
+          Object.keys(manager._items).length; // 0
+        });
+      });
+    });
+  });
 ```
-
-In this example, the data `a` will be remounted when the children are remounted.
-
-```js
-var memory = {
-  a: { childs: ['b'], childRemount: true },
-  b: {},
-};
-
-var funicular = new Funicular();
-
-funicular.Carriage = class extends funicular.Carriage {
-  // By default, this event is ignored, but it can be determined.
-  childDidRemount(unmountError, oldRoot, mountError, newRoot) {
-    this.remount();
-  }
-};
-
-funicular.mount('a', memory.a,
-  (error, a) => {
-    a.id // 1
-    a.childs.b.id // 2
-    a.childs.b.remount();
-  },
-  (unmountError, olda, mountError, newa) => {
-    newa.id // 4
-    newa.childs.b // 3
-    // Our `a` remounted.
-    newa.unmount();
-  },
-  (error, a) => {
-    // All unmounted.
-  }
-);
-```
-
-## Lifecycle
-
-* [`funicular.mount(name, data, mountedCallback, remoutedCallback, unmountedCallback)`](https://ancientsouls.github.io/Funicular/Funicular.html#mount)
-  * [`var carriage = new funicular.Carriage(funicular, name, data)`](https://ancientsouls.github.io/Funicular/Carriage.html)
-    * [`carriage.mount()`](https://ancientsouls.github.io/Funicular/Carriage.html#mount)
-      * [`carriage.enable(callback)`](https://ancientsouls.github.io/Funicular/Carriage.html#enable) **to override**
-        * `carriage.mountedCallbacks` call all mount callback handlers of this carriage setted from multiple mounts
-* [`carriage.remount()`](https://ancientsouls.github.io/Funicular/Carriage.html#remount)
-  * [`funicular.mount(name, data, mountedCallback, remoutedCallback, unmountedCallback)`](https://ancientsouls.github.io/Funicular/Funicular.html#mount)
-    * [`carriage.unmount()`](https://ancientsouls.github.io/Funicular/Carriage.html#unmount)
-      * `carriage.remountedCallbacks` call all mount callback handlers of this carriage setted from multiple mounts
-* [`carriage.unmount()`](https://ancientsouls.github.io/Funicular/Funicular.html#unmount)
-  * [`carriage.disable(callback)`](https://ancientsouls.github.io/Funicular/Carriage.html#disable) **to override**
-    * `carriage.unmountedCallbacks` call all mount callback handlers of this carriage setted from multiple mounts
 
 ## Errors
 
