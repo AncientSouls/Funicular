@@ -63,7 +63,7 @@ You must override methods <a href="https://ancientsouls.github.io/Funicular/Item
 </li>
 </ul>
 </li>
-<li><a href="https://ancientsouls.github.io/Funicular/Item.html#remount">`item.remount</a> - Mount new active item with equal name any may be other query, and then unmount current item.<ul>
+<li><a href="https://ancientsouls.github.io/Funicular/Item.html#remount"><code>item.remount</code></a> - Mount new active item with equal name any may be other query, and then unmount current item.<ul>
 <li><a href="https://ancientsouls.github.io/Funicular/Item.html#mount"><code>item.mount</code></a> - Start sequence of needed actions for run, start, mount, execute and so on...<ul>
 <li><a href="https://ancientsouls.github.io/Funicular/Item.html#unmount"><code>item.unmount</code></a> - Start sequence of needed actions forForget, stop, turn off and so on...</li>
 </ul>
@@ -155,8 +155,8 @@ var manager = new Manager(CustomItem);</code></pre><p>Any item can be tracked us
     console.log('just unmounted once');
   }))
   .on('unmounted', (error, item, event) => console.log('just fully unmounted, without remounting'))
-  .prepare((error, item) => console.log('just prepared, calls once'))</code></pre><p>Method <code>on</code> reacts to real events, but methods as <code>prepare</code>, <code>mount</code>, <code>remount</code>, <code>unmount</code> call callback anyway. If item already prepared, and you call .prepare with callback, it be it will be called immediately.
-Any unmounting occurs by calling <code>item.unmount</code>. Calling to <code>item.unmount</code> does not mean that it does happen.
+  .prepare((error, item) => console.log('just prepared, calls once'))</code></pre><p>Method <code>on</code> reacts to real events, but methods as <a href="https://ancientsouls.github.io/Funicular/Item.html#prepare"><code>item.prepare</code></a>, <a href="https://ancientsouls.github.io/Funicular/Item.html#mount"><code>item.mount</code></a>, <a href="https://ancientsouls.github.io/Funicular/Item.html#remount"><code>item.remount</code></a>, <a href="https://ancientsouls.github.io/Funicular/Item.html#unmount"><code>item.unmount</code></a> call callback anyway. If item already prepared, and you call .prepare with callback, it be it will be called immediately.
+Any unmounting occurs by calling <a href="https://ancientsouls.github.io/Funicular/Item.html#unmount"><code>item.unmount</code></a>. Calling to <a href="https://ancientsouls.github.io/Funicular/Item.html#unmount"><code>item.unmount</code></a> does not mean that it does happen.
 This means that the item will check whether there are other dependent parental item, and only if they are not exists, unmount self. If the carriage is unmount, it tries to unmount all her children. If childs do not have other parents, they too will be unmounted.</p>
 <pre class="prettyprint source lang-js"><code>manager.get('a', memory.a)
   .prepare((error, a) => {
@@ -241,7 +241,7 @@ manager.get(undefined, { childs: ['a'] })
   });</code></pre><h2>Errors</h2><p>If at any stage an error occurs it can be written in <code>carriage.error</code> or sended into callback in <code>enable</code> and <code>disable</code> methods. It is used as invalid carriage marker.</p>
 <h2>Tests</h2><p>Tests can be started with comand <code>npm install ancient-funicular &amp;&amp; cd ./node_modules/ancient-funicular &amp;&amp; npm run compile &amp;&amp; npm test</code>. For more information lern <a href="https://github.com/AncientSouls/Funicular/blob/master/src/tests/index.js">src/tests/index.js</a>.</p>
 <h2>License</h2><p>The MIT License (MIT)
-Copyright (c) 2016 Ivan S Glazunov <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&#x3a;&#x69;&#x76;&#97;&#x6e;&#115;&#x67;&#x6c;&#x61;&#x7a;&#x75;&#x6e;&#x6f;&#118;&#x40;&#103;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;">&#x69;&#x76;&#97;&#x6e;&#115;&#x67;&#x6c;&#x61;&#x7a;&#x75;&#x6e;&#x6f;&#118;&#x40;&#103;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;</a></p>
+Copyright (c) 2016 Ivan S Glazunov <a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#x3a;&#x69;&#x76;&#x61;&#110;&#115;&#103;&#108;&#x61;&#122;&#117;&#x6e;&#x6f;&#x76;&#64;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#x69;&#x76;&#x61;&#110;&#115;&#103;&#108;&#x61;&#122;&#117;&#x6e;&#x6f;&#x76;&#64;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a></p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 <p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p></article>
@@ -257,7 +257,7 @@ Copyright (c) 2016 Ivan S Glazunov <a href="&#x6d;&#97;&#x69;&#108;&#x74;&#x6f;&
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu May 18 2017 14:00:12 GMT+0000 (UTC) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu May 18 2017 14:06:55 GMT+0000 (UTC) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
