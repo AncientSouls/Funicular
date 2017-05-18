@@ -1,4 +1,11 @@
-#### 1.0.2 (2017-5-11)
+#### 2.0.0 (2017-5-18)
+
+##### Refactor
+
+* **terms** Simplest terms.
+* **events** Class event emitter.
+* **callbacks** New simple callback logic.
+* **recursion** Better recursion solution.
 
 ##### Cleaning
 

@@ -25,7 +25,7 @@ Any mount/unmount process consists of these steps:
 * [`manager.get`](https://ancientsouls.github.io/Funicular/Manager.html#get) Universal getter of items. 
     * [`item.prepare`](https://ancientsouls.github.io/Funicular/Item.html#prepare) - Start sequence of loading of this data and childs queries.
         * [`item.mount`](https://ancientsouls.github.io/Funicular/Item.html#mount) - Start sequence of needed actions for run, start, mount, execute and so on...
-* [`item.remount](https://ancientsouls.github.io/Funicular/Item.html#remount) - Mount new active item with equal name any may be other query, and then unmount current item.
+* [`item.remount`](https://ancientsouls.github.io/Funicular/Item.html#remount) - Mount new active item with equal name any may be other query, and then unmount current item.
   * [`item.mount`](https://ancientsouls.github.io/Funicular/Item.html#mount) - Start sequence of needed actions for run, start, mount, execute and so on...
       * [`item.unmount`](https://ancientsouls.github.io/Funicular/Item.html#unmount) - Start sequence of needed actions forForget, stop, turn off and so on...
 * [`item.unmount`](https://ancientsouls.github.io/Funicular/Item.html#unmount) - Start sequence of needed actions forForget, stop, turn off and so on...
@@ -124,8 +124,8 @@ manager.get('a')
   .prepare((error, item) => console.log('just prepared, calls once'))
 ```
 
-Method `on` reacts to real events, but methods as `prepare`, `mount`, `remount`, `unmount` call callback anyway. If item already prepared, and you call .prepare with callback, it be it will be called immediately.
-Any unmounting occurs by calling `item.unmount`. Calling to `item.unmount` does not mean that it does happen.
+Method `on` reacts to real events, but methods as [`item.prepare`](https://ancientsouls.github.io/Funicular/Item.html#prepare), [`item.mount`](https://ancientsouls.github.io/Funicular/Item.html#mount), [`item.remount`](https://ancientsouls.github.io/Funicular/Item.html#remount), [`item.unmount`](https://ancientsouls.github.io/Funicular/Item.html#unmount) call callback anyway. If item already prepared, and you call .prepare with callback, it be it will be called immediately.
+Any unmounting occurs by calling [`item.unmount`](https://ancientsouls.github.io/Funicular/Item.html#unmount). Calling to [`item.unmount`](https://ancientsouls.github.io/Funicular/Item.html#unmount) does not mean that it does happen.
 This means that the item will check whether there are other dependent parental item, and only if they are not exists, unmount self. If the carriage is unmount, it tries to unmount all her children. If childs do not have other parents, they too will be unmounted.
 
 ```js

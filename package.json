@@ -1,6 +1,6 @@
 {
   "name": "ancient-funicular",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Just async mounting, updating and unmounting hierarchical items.",
   "keywords": [
     "javascript",
