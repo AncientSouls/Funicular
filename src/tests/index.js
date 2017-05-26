@@ -103,6 +103,10 @@ describe('AncientSouls/Funicular', () => {
           assert.equal(manager._items.b, b);
           assert.equal(manager._items.c, c);
           
+          assert.lengthOf(c.parents, 1);
+          assert.lengthOf(b.parents, 1);
+          assert.lengthOf(a.parents, 0);
+          
           assert.isTrue(a.isPrepared);
           assert.isTrue(b.isPrepared);
           assert.isTrue(c.isPrepared);
@@ -113,6 +117,10 @@ describe('AncientSouls/Funicular', () => {
             assert.isTrue(a.isMounted);
             assert.isTrue(b.isMounted);
             assert.isTrue(c.isMounted);
+          
+            assert.lengthOf(c.parents, 1);
+            assert.lengthOf(b.parents, 1);
+            assert.lengthOf(a.parents, 0);
             
             item.unmount((error, item) => {
               assert.isNotOk(manager._items.a);
@@ -122,6 +130,10 @@ describe('AncientSouls/Funicular', () => {
               assert.isTrue(a.isUnmounted);
               assert.isTrue(b.isUnmounted);
               assert.isTrue(c.isUnmounted);
+              
+              assert.lengthOf(c.parents, 1);
+              assert.lengthOf(b.parents, 1);
+              assert.lengthOf(a.parents, 0);
               
               done();
             })
@@ -156,12 +168,20 @@ describe('AncientSouls/Funicular', () => {
           assert.isTrue(b.isPrepared);
           assert.isTrue(c.isPrepared);
           
+          assert.lengthOf(c.parents, 1);
+          assert.lengthOf(b.parents, 1);
+          assert.lengthOf(a.parents, 1);
+          
           item.mount((error, item) => {
             assert.ifError(error);
             
             assert.isTrue(a.isMounted);
             assert.isTrue(b.isMounted);
             assert.isTrue(c.isMounted);
+            
+            assert.lengthOf(c.parents, 1);
+            assert.lengthOf(b.parents, 1);
+            assert.lengthOf(a.parents, 1);
             
             item.unmount((error, item) => {
               assert.isNotOk(manager._items.a);
@@ -171,6 +191,10 @@ describe('AncientSouls/Funicular', () => {
               assert.isTrue(a.isUnmounted);
               assert.isTrue(b.isUnmounted);
               assert.isTrue(c.isUnmounted);
+              
+              assert.lengthOf(c.parents, 1);
+              assert.lengthOf(b.parents, 1);
+              assert.lengthOf(a.parents, 1);
               
               done();
             })
@@ -216,6 +240,13 @@ describe('AncientSouls/Funicular', () => {
           assert.isTrue(d.isPrepared);
           assert.isTrue(e.isPrepared);
           assert.isTrue(f.isPrepared);
+
+          assert.lengthOf(f.parents, 1);
+          assert.lengthOf(e.parents, 1);
+          assert.lengthOf(d.parents, 2);
+          assert.lengthOf(c.parents, 1);
+          assert.lengthOf(b.parents, 1);
+          assert.lengthOf(a.parents, 2);
           
           item.mount((error, item) => {
             assert.ifError(error);
@@ -226,6 +257,13 @@ describe('AncientSouls/Funicular', () => {
             assert.isTrue(d.isMounted);
             assert.isTrue(e.isMounted);
             assert.isTrue(f.isMounted);
+  
+            assert.lengthOf(f.parents, 1);
+            assert.lengthOf(e.parents, 1);
+            assert.lengthOf(d.parents, 2);
+            assert.lengthOf(c.parents, 1);
+            assert.lengthOf(b.parents, 1);
+            assert.lengthOf(a.parents, 2);
             
             item.unmount((error, item) => {
               assert.isNotOk(manager._items.a);
@@ -241,6 +279,13 @@ describe('AncientSouls/Funicular', () => {
               assert.isTrue(d.isUnmounted);
               assert.isTrue(e.isUnmounted);
               assert.isTrue(f.isUnmounted);
+    
+              assert.lengthOf(f.parents, 1);
+              assert.lengthOf(e.parents, 1);
+              assert.lengthOf(d.parents, 2);
+              assert.lengthOf(c.parents, 1);
+              assert.lengthOf(b.parents, 1);
+              assert.lengthOf(a.parents, 2);
               
               done();
             })
