@@ -12,8 +12,10 @@ class Manager {
   constructor(Item) {
     
     /**
-     * @type {Object.<string,Item>}
+     * @type {Object.<GlobalName,Item>}
      * @protected
+     * @description
+     * Contains last versions of registred named items by global names.
      */
     this._items = {};
     
@@ -21,24 +23,29 @@ class Manager {
      * @type {function}
      * @protected
      */
-     this.Item = Item;
+     this._Item = Item;
     
   }
   
   /**
-   * Universal getter of items. Not mount or prepare item, just return it. You must manual use `prepare` and `mount` methods.
    * @param {string} name - If not sended, create new unnamed item.
    * @param [query] - Preparation is responsible for responding to the query. It may, query can be required in your Item class. 
    * @returns {Item}
+   * @description
+   * Responsible for:
+   * * Constructing new item, if not exists not remounted or unmounted item with equal name.
+   * * Register items as in {@ling Manager#_items}
+   * > Attention! It is not a mount tool, only a search. Prepare and mount manually!
    * @example
-   * manager.get('a').prepare((error, a) => {});
+   * var a = manager.get('a');
+   * a.name == 'a'; // true
    */
   get(name, query) {
     if (name) {
-      if (this._items[name]) return this._items[name];
-      else return (this._items[name] = new this.Item(this, name, query));
+      if (this._items[name] && !this._items[name].isReplaced && !this._items[name].isUnmounted) return this._items[name];
+      else return (this._items[name] = new this._Item(this, name, query));
     } else {
-      return new this.Item(this, name, query);
+      return new this._Item(this, name, query);
     }
   }
   

@@ -1,3 +1,13 @@
+#### 3.0.0 (2017-6-1)
+
+##### Refactor
+
+* **tests** More tests.
+* **safe** Safe logic with currect override logic.
+* **simple** Just add and what you need to this simple toy.
+* **events** Emitter in separate `item.emitter` key, without `Item` methods for it. Use as you want.
+* **recursion** Freely from it, just say "do it, without waiting :)".
+
 #### 2.0.0 (2017-5-18)
 
 ##### Refactor
