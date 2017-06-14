@@ -1,5 +1,7 @@
 # Funicular
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/AncientSouls/Funicular.svg)](https://greenkeeper.io/)
+
 > 3.0.0
 
 ---
