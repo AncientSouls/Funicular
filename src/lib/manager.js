@@ -28,7 +28,7 @@ class Manager {
   }
   
   /**
-   * @param {string} name - If not sended, create new unnamed item.
+   * @param {string|undefined} name - If undefined, create new unnamed item.
    * @param [query] - Preparation is responsible for responding to the query. It may, query can be required in your Item class. 
    * @returns {Item}
    * @description
