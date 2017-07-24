@@ -1,17 +1,17 @@
 var documents = {
   a: {
     id: 'z',
-    type: 'executors://js',
+    type: 'js',
     code: `module.exports = 1;`,
   },
   b: {
     id: 'y',
-    type: 'executors://js',
+    type: 'js',
     code: `module.exports = 2;`,
   },
   c: {
     id: 'x',
-    type: 'executors://js',
+    type: 'js',
     childs: {
       'a': 'a',
       'b': 'b',
@@ -29,7 +29,7 @@ module.exports = a+b;
   },
   e: {
     id: 'v',
-    type: 'executors://js',
+    type: 'js',
     childs: {
       'document': 'document',
       'd': 'd',
@@ -41,9 +41,27 @@ document.set(module.item);
 module.exports = '<div>123</div>';
     `,
   },
+  f: {
+    id: 'u',
+    type: 'js',
+    childs: {
+      'a': 'a',
+      'b': 'b',
+    },
+    code: `
+var a = require('a');
+var b = require('b');
+module.exports = ''+a+b;
+    `,
+  },
+  g: {
+    id: 't',
+    type: 'text',
+    code: `test`,
+  },
   css: {
     id: 'css',
-    type: 'executors://js',
+    type: 'js',
     childs: {
       'document': 'document',
     },
@@ -62,9 +80,24 @@ module.exports = {
 };
     `
   },
+  text: {
+    id: 'text',
+    type: 'js',
+    code: `
+module.exports = {
+  mount() {
+    this.getResult = () => this.data.code;
+    return Promise.resolve(this);
+  },
+  unmount() {
+    return Promise.resolve(this);
+  },
+};
+    `
+  },
   document: {
     id: 'document',
-    type: 'executors://js',
+    type: 'js',
     code: `
 module.exports = {
   items: [],

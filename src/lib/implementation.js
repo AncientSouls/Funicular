@@ -15,6 +15,7 @@ class Item extends ProtoItem {
       if (this.data.type) {
         // Support for custom type mounter.
         this.get(this.data.type).then((typeItem) => {
+          this.set(null, typeItem);
           var type = typeItem.getResult();
           if (type.mount) type.mount.call(this).then(() => resolve(this), reject);
           else resolve(this);
@@ -31,14 +32,16 @@ class Item extends ProtoItem {
   }
   unmount() {
     if (!this.isMounted()) return Promise.resolve(this);
+    if (Object.keys(this.parents).length) return Promise.resolve(this);
     
     delete this.getResult;
     
     return Promise
     // Unmount and unset childs before try unmount current item.
-    .all(Object.keys(this.childs).map((c) => (
-      this.childs[c].unmount().then((child) => this.unset(child))
-    )))
+    .all(Object.keys(this.childs).map((c) => {
+      this.unset(this.childs[c]);
+      return this.childs[c].unmount();
+    }))
     .then(() => {
       // System non-stored data, is not unmountable.
       if (!this.data.type) return this;
@@ -46,8 +49,17 @@ class Item extends ProtoItem {
       // Load custom type unmounter.
       return this.get(this.data.type).then((typeItem) => {
         var type = typeItem.getResult();
-        if (type.unmount) return type.unmount.call(this);
-        else this;
+        
+        var unmountType = () => {
+          this.unset(typeItem);
+          return typeItem.unmount().then(() => this);
+        };
+        
+        if (type.unmount) return type.unmount.call(this).then(unmountType);
+        else {
+          unmountType();
+          return this;
+        }
       }).then(() => this);
     })
   }

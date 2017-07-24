@@ -6,7 +6,7 @@ var counter = 1;
 function Parent(name, item) {
   /**
    * Unique index of each item.
-   * @type {Index}
+   * @type {Index|null}
    * @protected
    */
   this.name = name;
@@ -101,10 +101,13 @@ class Item {
    * @param {Item} child
    */
   set(name, child) {
-    if (typeof(name) != 'string') throw new Error(`name ${name} must be a string`);
     if (!isItem(child)) throw new Error(`child ${child} must be a Item instance.`);
-    this.childs[name] = child;
-    child.parents[this.index] = new Parent(name, this);
+    if (typeof(name) == 'string') {
+      this.childs[name] = child;
+      child.parents[this.index] = new Parent(name, this);
+    } else {
+      child.parents[this.index] = new Parent(null, this);
+    }
   }
   
   /**
