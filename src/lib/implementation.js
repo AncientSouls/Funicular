@@ -92,10 +92,10 @@ var js = {
       
       var childs = {};
       if (this.data.childs) for (var c in this.data.childs)
-        childs[c] = this.get(this.data.childs[c]).then((child) => {
+        childs[c] = ((c) => this.get(this.data.childs[c]).then((child) => {
           this.set(c, child);
           return child;
-        });
+        }))(c);
       
       return PromiseProps(childs).then((childs) => {
         vm.runInNewContext(this.data.code, {
