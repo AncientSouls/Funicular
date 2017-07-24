@@ -32,24 +32,49 @@ class Item extends ProtoItem {
 }
 
 describe('AncientSouls/Funicular', () => {
-  it('js', done => {
+  it('js', () => (
     get('c')
     .then(i => {
+      // Is items mounted?
       assert.equal(i.getResult(), 3);
+      assert.equal(i.childs.a.getResult(), 1);
+      assert.equal(i.childs.b.getResult(), 2);
+      
       return i;
     })
     .then(i => i.unmount())
-    .then(i => assert.isFalse(i.isMounted()) || i)
-    .then(i => done())
-  });
-  it('css', (done) => {
+    .then(i => {
+      // Is items unmounted?
+      assert.isFalse(i.isMounted());
+      assert.isFalse(i.childs.a.isMounted());
+      assert.isFalse(i.childs.b.isMounted());
+      
+      return i;
+    })
+  ));
+  it('css', () => (
     get('e')
     .then((i) => {
+      // Is items mounted?
+      assert.equal(i.getResult(), '<div>123</div>');
+      assert.equal(typeof(i.childs.document.getResult()), 'object');
+      assert.equal(i.childs.d.getResult(), 'body { color: red; }');
+      // Document has been generated?
       assert.deepEqual(
         cache.document.getResult().getResults(),
         [ 'body { color: red; }', '<div>123</div>' ]
       );
-      done();
+      
+      return i;
     })
-  });
+    .then(i => i.unmount())
+    .then(i => {
+      // Is items unmounted?
+      assert.isFalse(i.isMounted());
+      assert.isFalse(i.childs.document.isMounted());
+      assert.isFalse(i.childs.d.isMounted());
+      
+      return i;
+    })
+  ));
 });
