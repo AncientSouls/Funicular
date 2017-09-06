@@ -2,6 +2,7 @@ import Item from './item';
 
 /**
  * @class
+ * @memberof module:ancient-funicular
  */
 class Manager {
   
@@ -34,7 +35,7 @@ class Manager {
    * @description
    * Responsible for:
    * * Constructing new item, if not exists not remounted or unmounted item with equal name.
-   * * Register items as in {@ling Manager#_items}
+   * * Register items as in {@link Manager#_items}
    * > Attention! It is not a mount tool, only a search. Prepare and mount manually!
    * @example
    * var a = manager.get('a');

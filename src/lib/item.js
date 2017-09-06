@@ -4,6 +4,7 @@ var counter = 1;
 
 /**
  * @class
+ * @memberof module:ancient-funicular
  */
 class Item {
   
