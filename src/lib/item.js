@@ -109,6 +109,7 @@ class Item {
   }
   
   /**
+   * @fires Item#replaced
    * @param {LocalName} localName
    * @param {Item} child
    */
@@ -206,12 +207,6 @@ class Item {
   }
   
   /**
-   * @event Item#prepared
-   * @param [error]
-   * @param {Item} item
-   */
-  
-  /**
    * @param {LocalName} localName
    * @param [childError]
    * @param {Item} child
@@ -256,12 +251,6 @@ class Item {
     this.emitter.emit('replaced', this, item);
     return item;
   }
-  
-  /**
-   * @event Item#replaced
-   * @param {Item} oldItem
-   * @param {Item} newItem
-   */
   
   getActive() {
     if (this.replacedTo) {
@@ -335,12 +324,6 @@ class Item {
   }
   
   /**
-   * @event Item#mounted
-   * @param [error]
-   * @param {Item} item
-   */
-  
-  /**
    * @param {Item~unmountCallback} [callback]
    */
   unmount(callback) {
@@ -404,5 +387,37 @@ class Item {
     }
   }
 }
+
+/**
+ * @event Item#replaced
+ * @memberof module:ancient-funicular
+ * @type {object}
+ * @property {Item} oldItem
+ * @property {Item} newItem
+ */
+
+/**
+ * @event Item#prepared
+ * @memberof module:ancient-funicular
+ * @type {object}
+ * @property error
+ * @property {Item} item
+ */
+
+/**
+ * @event Item#mounted
+ * @memberof module:ancient-funicular
+ * @type {object}
+ * @property error
+ * @property {Item} item
+ */
+
+/**
+ * @event Item#unmounted
+ * @memberof module:ancient-funicular
+ * @type {object}
+ * @property error
+ * @property {Item} item
+ */
 
 export default Item;
