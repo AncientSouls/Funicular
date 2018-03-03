@@ -130,8 +130,9 @@ function mixin<T extends TClass<IInstance>>(
     remounted;
     
     mount(cursor) {
-      if (this.state !== EFunicularState.Constructed)
+      if (this.state !== EFunicularState.Constructed) {
         throw new Error(`Funicular ${this.id} is already mounted.`);
+      }
       
       this.cursor = cursor;
       
