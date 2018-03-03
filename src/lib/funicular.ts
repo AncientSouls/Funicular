@@ -13,7 +13,7 @@ import {
 
 import {
   TCursor,
-} from 'ancient-cursors/lib/cursor';
+} from 'ancient-cursor/lib/cursor';
 
 import {
   FunicularsManager,

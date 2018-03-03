@@ -6,11 +6,11 @@ import * as async from 'async';
 
 import {
   Cursor,
-} from 'ancient-cursors/lib/cursor';
+} from 'ancient-cursor/lib/cursor';
 
 import {
   ChildsCursorsManager,
-} from 'ancient-cursors/lib/childs-cursors-manager';
+} from 'ancient-cursor/lib/childs-cursors-manager';
 
 import {
   Funicular,

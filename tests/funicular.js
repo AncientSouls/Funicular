@@ -14,8 +14,8 @@ require("mocha");
 var _ = require("lodash");
 var chai_1 = require("chai");
 var async = require("async");
-var cursor_1 = require("../lib/cursor");
-var childs_cursors_manager_1 = require("../lib/childs-cursors-manager");
+var cursor_1 = require("ancient-cursor/lib/cursor");
+var childs_cursors_manager_1 = require("ancient-cursor/lib/childs-cursors-manager");
 var funicular_1 = require("../lib/funicular");
 var funiculars_manager_1 = require("../lib/funiculars-manager");
 function default_1() {

@@ -1,6 +1,6 @@
 import { TClass, IInstance } from 'ancient-mixins/lib/mixins';
 import { INode, INodeEventsList } from 'ancient-mixins/lib/node';
-import { TCursor } from 'ancient-cursors/lib/cursor';
+import { TCursor } from 'ancient-cursor/lib/cursor';
 import { TFunicularsManager } from './funiculars-manager';
 declare type TFunicular = IFunicular<IFunicularEventsList<IFunicularEventData>>;
 declare enum EFunicularState {
