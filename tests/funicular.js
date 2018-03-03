@@ -10,7 +10,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-require("mocha");
 var _ = require("lodash");
 var chai_1 = require("chai");
 var async = require("async");
