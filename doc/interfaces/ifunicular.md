@@ -9,51 +9,15 @@
 ## Hierarchy
 
 
- `INode`.<`IEventsList`>
+ `any`
 
 **↳ IFunicular**
 
-↳  [Funicular](../classes/funicular.md)
 
 
 
 
 
-
-
-
-
-
-## Indexable
-
-\[key: `string`\]:&nbsp;`any`
-
-## Constructors
-<a id="constructor"></a>
-
-
-### ⊕ **new IFunicular**(id?: *`string`*): `any`
-
-
-*Inherited from INode.__new*
-
-*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/node.d.ts:11*
-
-
-
-**Parameters:**
-
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| id | `string`   |  - |
-
-
-
-
-
-**Returns:** `any`
-
----
 
 
 ## Properties
@@ -63,7 +27,7 @@
 
 **●  Node**:  *`TClass`.<[TFunicular](../#tfunicular)>* 
 
-*Defined in [lib/funicular.ts:67](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L67)*
+*Defined in [lib/funicular.ts:67](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L67)*
 
 
 
@@ -77,7 +41,7 @@ ___
 
 **●  childs**:  *[TFunicularsManager](../#tfunicularsmanager)* 
 
-*Defined in [lib/funicular.ts:71](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L71)*
+*Defined in [lib/funicular.ts:71](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L71)*
 
 
 
@@ -91,109 +55,7 @@ ___
 
 **●  cursor**:  *`TCursor`* 
 
-*Defined in [lib/funicular.ts:74](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L74)*
-
-
-
-
-
-___
-
-<a id="destroy"></a>
-
-###  destroy
-
-**●  destroy**:  *`function`* 
-
-*Inherited from INode.destroy*
-
-*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/node.d.ts:15*
-
-
-#### Type declaration
-►(): `void`
-
-
-
-
-
-**Returns:** `void`
-
-
-
-
-
-
-___
-
-<a id="emitter"></a>
-
-###  emitter
-
-**●  emitter**:  *`EventEmitter`* 
-
-*Inherited from IEvents.emitter*
-
-*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/events.d.ts:5*
-
-
-
-
-
-___
-
-<a id="generateid"></a>
-
-###  generateId
-
-**●  generateId**:  *`function`* 
-
-*Inherited from INode.generateId*
-
-*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/node.d.ts:13*
-
-
-#### Type declaration
-►(): `string`
-
-
-
-
-
-**Returns:** `string`
-
-
-
-
-
-
-___
-
-<a id="id"></a>
-
-###  id
-
-**●  id**:  *`string`* 
-
-*Inherited from INode.id*
-
-*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/node.d.ts:11*
-
-
-
-
-
-___
-
-<a id="isdestroyed"></a>
-
-###  isDestroyed
-
-**●  isDestroyed**:  *`boolean`* 
-
-*Inherited from INode.isDestroyed*
-
-*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/node.d.ts:14*
+*Defined in [lib/funicular.ts:74](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L74)*
 
 
 
@@ -207,7 +69,7 @@ ___
 
 **●  needRemount**:  *`boolean`* 
 
-*Defined in [lib/funicular.ts:77](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L77)*
+*Defined in [lib/funicular.ts:77](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L77)*
 
 
 
@@ -221,7 +83,7 @@ ___
 
 **●  needUnmount**:  *`boolean`* 
 
-*Defined in [lib/funicular.ts:78](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L78)*
+*Defined in [lib/funicular.ts:78](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L78)*
 
 
 
@@ -235,7 +97,7 @@ ___
 
 **●  parents**:  *[TFunicularsManager](../#tfunicularsmanager)* 
 
-*Defined in [lib/funicular.ts:72](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L72)*
+*Defined in [lib/funicular.ts:72](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L72)*
 
 
 
@@ -249,7 +111,7 @@ ___
 
 **●  remounted**:  *[TFunicular](../#tfunicular)* 
 
-*Defined in [lib/funicular.ts:80](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L80)*
+*Defined in [lib/funicular.ts:80](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L80)*
 
 
 
@@ -263,7 +125,7 @@ ___
 
 **●  result**:  *`any`* 
 
-*Defined in [lib/funicular.ts:75](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L75)*
+*Defined in [lib/funicular.ts:75](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L75)*
 
 
 
@@ -277,7 +139,7 @@ ___
 
 **●  state**:  *[EFunicularState](../enums/efunicularstate.md)* 
 
-*Defined in [lib/funicular.ts:69](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L69)*
+*Defined in [lib/funicular.ts:69](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L69)*
 
 
 
@@ -295,7 +157,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:95](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L95)*
+*Defined in [lib/funicular.ts:95](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L95)*
 
 
 
@@ -325,7 +187,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:109](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L109)*
+*Defined in [lib/funicular.ts:109](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L109)*
 
 
 
@@ -347,7 +209,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:106](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L106)*
+*Defined in [lib/funicular.ts:106](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L106)*
 
 
 
@@ -377,7 +239,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:107](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L107)*
+*Defined in [lib/funicular.ts:107](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L107)*
 
 
 
@@ -407,7 +269,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:91](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L91)*
+*Defined in [lib/funicular.ts:91](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L91)*
 
 
 
@@ -437,7 +299,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:92](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L92)*
+*Defined in [lib/funicular.ts:92](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L92)*
 
 
 
@@ -467,7 +329,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:110](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L110)*
+*Defined in [lib/funicular.ts:110](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L110)*
 
 
 
@@ -497,7 +359,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:89](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L89)*
+*Defined in [lib/funicular.ts:89](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L89)*
 
 
 
@@ -519,42 +381,6 @@ ___
 
 ___
 
-<a id="emit"></a>
-
-###  emit
-
-► **emit**IE(eventName: *`string`*, data: *`IEventsList[IE]`*): `this`
-
-
-
-*Inherited from IEvents.emit*
-
-*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/events.d.ts:6*
-
-
-
-**Type parameters:**
-
-#### IE :  `keyof IEventsList`
-**Parameters:**
-
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| eventName | `string`   |  - |
-| data | `IEventsList[IE]`   |  - |
-
-
-
-
-
-**Returns:** `this`
-
-
-
-
-
-___
-
 <a id="mount"></a>
 
 ###  mount
@@ -563,7 +389,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:82](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L82)*
+*Defined in [lib/funicular.ts:82](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L82)*
 
 
 
@@ -585,114 +411,6 @@ ___
 
 ___
 
-<a id="off"></a>
-
-###  off
-
-► **off**IE(eventName: *`string`*, listener: *`function`*): `this`
-
-
-
-*Inherited from IEvents.off*
-
-*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/events.d.ts:9*
-
-
-
-**Type parameters:**
-
-#### IE :  `keyof IEventsList`
-**Parameters:**
-
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| eventName | `string`   |  - |
-| listener | `function`   |  - |
-
-
-
-
-
-**Returns:** `this`
-
-
-
-
-
-___
-
-<a id="on"></a>
-
-###  on
-
-► **on**IE(eventName: *`string`*, listener: *`function`*): `this`
-
-
-
-*Inherited from IEvents.on*
-
-*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/events.d.ts:7*
-
-
-
-**Type parameters:**
-
-#### IE :  `keyof IEventsList`
-**Parameters:**
-
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| eventName | `string`   |  - |
-| listener | `function`   |  - |
-
-
-
-
-
-**Returns:** `this`
-
-
-
-
-
-___
-
-<a id="once"></a>
-
-###  once
-
-► **once**IE(eventName: *`string`*, listener: *`function`*): `this`
-
-
-
-*Inherited from IEvents.once*
-
-*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/events.d.ts:8*
-
-
-
-**Type parameters:**
-
-#### IE :  `keyof IEventsList`
-**Parameters:**
-
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| eventName | `string`   |  - |
-| listener | `function`   |  - |
-
-
-
-
-
-**Returns:** `this`
-
-
-
-
-
-___
-
 <a id="register"></a>
 
 ###  register
@@ -701,7 +419,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:86](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L86)*
+*Defined in [lib/funicular.ts:86](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L86)*
 
 
 
@@ -731,7 +449,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:83](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L83)*
+*Defined in [lib/funicular.ts:83](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L83)*
 
 
 
@@ -753,7 +471,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:94](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L94)*
+*Defined in [lib/funicular.ts:94](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L94)*
 
 
 
@@ -783,7 +501,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:97](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L97)*
+*Defined in [lib/funicular.ts:97](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L97)*
 
 
 
@@ -813,7 +531,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:100](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L100)*
+*Defined in [lib/funicular.ts:100](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L100)*
 
 
 
@@ -843,7 +561,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:98](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L98)*
+*Defined in [lib/funicular.ts:98](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L98)*
 
 
 
@@ -873,7 +591,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:101](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L101)*
+*Defined in [lib/funicular.ts:101](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L101)*
 
 
 
@@ -903,7 +621,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:84](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L84)*
+*Defined in [lib/funicular.ts:84](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L84)*
 
 
 
@@ -925,7 +643,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:87](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L87)*
+*Defined in [lib/funicular.ts:87](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L87)*
 
 
 
@@ -955,7 +673,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:104](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L104)*
+*Defined in [lib/funicular.ts:104](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L104)*
 
 
 
@@ -977,7 +695,7 @@ ___
 
 
 
-*Defined in [lib/funicular.ts:103](https://github.com/AncientSouls/Funicular/blob/085129a/src/lib/funicular.ts#L103)*
+*Defined in [lib/funicular.ts:103](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L103)*
 
 
 
