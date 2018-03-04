@@ -7,7 +7,7 @@
 ## Hierarchy
 
 
- `any`
+ `IManagerEventsList`
 
 
 
@@ -22,8 +22,27 @@
 
 
 
+## Indexable
+
+\[key: `string`\]:&nbsp;`any`
 
 ## Properties
+<a id="added"></a>
+
+###  added
+
+**●  added**:  *`IManagerEventData`* 
+
+*Inherited from IManagerEventsList.added*
+
+*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/manager.d.ts:9*
+
+
+
+
+
+___
+
 <a id="childsmounted"></a>
 
 ###  childsMounted
@@ -32,7 +51,7 @@
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[childsMounted](ifuniculareventslist.md#childsmounted)*
 
-*Defined in [lib/funicular.ts:47](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L47)*
+*Defined in [lib/funicular.ts:47](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L47)*
 
 
 
@@ -48,7 +67,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[childsMounting](ifuniculareventslist.md#childsmounting)*
 
-*Defined in [lib/funicular.ts:46](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L46)*
+*Defined in [lib/funicular.ts:46](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L46)*
 
 
 
@@ -64,7 +83,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[childsUnmounted](ifuniculareventslist.md#childsunmounted)*
 
-*Defined in [lib/funicular.ts:57](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L57)*
+*Defined in [lib/funicular.ts:57](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L57)*
 
 
 
@@ -80,7 +99,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[childsUnmounting](ifuniculareventslist.md#childsunmounting)*
 
-*Defined in [lib/funicular.ts:56](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L56)*
+*Defined in [lib/funicular.ts:56](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L56)*
 
 
 
@@ -96,7 +115,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[cursorFilled](ifuniculareventslist.md#cursorfilled)*
 
-*Defined in [lib/funicular.ts:45](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L45)*
+*Defined in [lib/funicular.ts:45](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L45)*
 
 
 
@@ -112,7 +131,25 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[cursorFilling](ifuniculareventslist.md#cursorfilling)*
 
-*Defined in [lib/funicular.ts:44](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L44)*
+*Defined in [lib/funicular.ts:44](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L44)*
+
+
+
+
+
+___
+
+<a id="destroyed"></a>
+
+###  destroyed
+
+**●  destroyed**:  *`INodeEventData`* 
+
+*Inherited from INodeEventsList.destroyed*
+
+*Overrides INodeEventsList.destroyed*
+
+*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/node.d.ts:8*
 
 
 
@@ -128,7 +165,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[mount](ifuniculareventslist.md#mount)*
 
-*Defined in [lib/funicular.ts:43](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L43)*
+*Defined in [lib/funicular.ts:43](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L43)*
 
 
 
@@ -144,7 +181,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[mounted](ifuniculareventslist.md#mounted)*
 
-*Defined in [lib/funicular.ts:50](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L50)*
+*Defined in [lib/funicular.ts:50](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L50)*
 
 
 
@@ -160,7 +197,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[remount](ifuniculareventslist.md#remount)*
 
-*Defined in [lib/funicular.ts:51](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L51)*
+*Defined in [lib/funicular.ts:51](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L51)*
 
 
 
@@ -176,7 +213,23 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[remounted](ifuniculareventslist.md#remounted)*
 
-*Defined in [lib/funicular.ts:52](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L52)*
+*Defined in [lib/funicular.ts:52](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L52)*
+
+
+
+
+
+___
+
+<a id="removed"></a>
+
+###  removed
+
+**●  removed**:  *`IManagerEventData`* 
+
+*Inherited from IManagerEventsList.removed*
+
+*Defined in /home/ubuntu/workspace/dev/packages/ancient-funicular/node_modules/ancient-mixins/lib/manager.d.ts:10*
 
 
 
@@ -192,7 +245,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[started](ifuniculareventslist.md#started)*
 
-*Defined in [lib/funicular.ts:49](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L49)*
+*Defined in [lib/funicular.ts:49](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L49)*
 
 
 
@@ -208,7 +261,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[starting](ifuniculareventslist.md#starting)*
 
-*Defined in [lib/funicular.ts:48](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L48)*
+*Defined in [lib/funicular.ts:48](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L48)*
 
 
 
@@ -224,7 +277,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[stopped](ifuniculareventslist.md#stopped)*
 
-*Defined in [lib/funicular.ts:55](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L55)*
+*Defined in [lib/funicular.ts:55](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L55)*
 
 
 
@@ -240,7 +293,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[stopping](ifuniculareventslist.md#stopping)*
 
-*Defined in [lib/funicular.ts:54](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L54)*
+*Defined in [lib/funicular.ts:54](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L54)*
 
 
 
@@ -256,7 +309,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[unmount](ifuniculareventslist.md#unmount)*
 
-*Defined in [lib/funicular.ts:53](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L53)*
+*Defined in [lib/funicular.ts:53](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L53)*
 
 
 
@@ -272,7 +325,7 @@ ___
 
 *Inherited from [IFunicularEventsList](ifuniculareventslist.md).[unmounted](ifuniculareventslist.md#unmounted)*
 
-*Defined in [lib/funicular.ts:58](https://github.com/AncientSouls/Funicular/blob/9099b0f/src/lib/funicular.ts#L58)*
+*Defined in [lib/funicular.ts:58](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L58)*
 
 
 
