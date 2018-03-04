@@ -53,7 +53,7 @@ Coming soon...
 
 **Τ TFunicular**:  *[IFunicular](interfaces/ifunicular.md)[IFunicularEventsList](interfaces/ifuniculareventslist.md)[IFunicularEventData](interfaces/ifuniculareventdata.md)* 
 
-*Defined in [funicular.ts:23](https://github.com/AncientSouls/Funicular/blob/ef49920/src/lib/funicular.ts#L23)*
+*Defined in [funicular.ts:23](https://github.com/AncientSouls/Funicular/blob/2ac0df0/src/lib/funicular.ts#L23)*
 
 
 
@@ -67,7 +67,7 @@ ___
 
 **Τ TFunicularsManager**:  *[IFunicularsManager](interfaces/ifunicularsmanager.md)[TFunicular](#tfunicular), [IFunicularsManagerEventsList](interfaces/ifunicularsmanagereventslist.md)* 
 
-*Defined in [funiculars-manager.ts:22](https://github.com/AncientSouls/Funicular/blob/ef49920/src/lib/funiculars-manager.ts#L22)*
+*Defined in [funiculars-manager.ts:22](https://github.com/AncientSouls/Funicular/blob/2ac0df0/src/lib/funiculars-manager.ts#L22)*
 
 
 
@@ -83,7 +83,7 @@ ___
 
 **●  MixedFunicular**:  *`TClass`.<[IFunicular](interfaces/ifunicular.md)[IFunicularEventsList](interfaces/ifuniculareventslist.md)[IFunicularEventData](interfaces/ifuniculareventdata.md)>*  =  mixin(Node)
 
-*Defined in [funicular.ts:290](https://github.com/AncientSouls/Funicular/blob/ef49920/src/lib/funicular.ts#L290)*
+*Defined in [funicular.ts:290](https://github.com/AncientSouls/Funicular/blob/2ac0df0/src/lib/funicular.ts#L290)*
 
 
 
@@ -97,7 +97,7 @@ ___
 
 **●  MixedFunicularsManager**:  *`TClass`.<[TFunicularsManager](#tfunicularsmanager)>*  =  mixin(Manager)
 
-*Defined in [funiculars-manager.ts:43](https://github.com/AncientSouls/Funicular/blob/ef49920/src/lib/funiculars-manager.ts#L43)*
+*Defined in [funiculars-manager.ts:43](https://github.com/AncientSouls/Funicular/blob/2ac0df0/src/lib/funiculars-manager.ts#L43)*
 
 
 
@@ -115,7 +115,7 @@ ___
 
 
 
-*Defined in [funiculars-manager.ts:35](https://github.com/AncientSouls/Funicular/blob/ef49920/src/lib/funiculars-manager.ts#L35)*
+*Defined in [funiculars-manager.ts:35](https://github.com/AncientSouls/Funicular/blob/2ac0df0/src/lib/funiculars-manager.ts#L35)*
 
 
 
