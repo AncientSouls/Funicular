@@ -35,7 +35,7 @@
 
 **●  childsMounted**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:47](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L47)*
+*Defined in [lib/funicular.ts:47](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L47)*
 
 
 
@@ -49,7 +49,7 @@ ___
 
 **●  childsMounting**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:46](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L46)*
+*Defined in [lib/funicular.ts:46](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L46)*
 
 
 
@@ -63,7 +63,7 @@ ___
 
 **●  childsUnmounted**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:57](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L57)*
+*Defined in [lib/funicular.ts:57](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L57)*
 
 
 
@@ -77,7 +77,7 @@ ___
 
 **●  childsUnmounting**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:56](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L56)*
+*Defined in [lib/funicular.ts:56](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L56)*
 
 
 
@@ -91,7 +91,7 @@ ___
 
 **●  cursorFilled**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:45](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L45)*
+*Defined in [lib/funicular.ts:45](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L45)*
 
 
 
@@ -105,7 +105,7 @@ ___
 
 **●  cursorFilling**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:44](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L44)*
+*Defined in [lib/funicular.ts:44](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L44)*
 
 
 
@@ -135,7 +135,7 @@ ___
 
 **●  mount**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:43](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L43)*
+*Defined in [lib/funicular.ts:43](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L43)*
 
 
 
@@ -149,7 +149,7 @@ ___
 
 **●  mounted**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:50](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L50)*
+*Defined in [lib/funicular.ts:50](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L50)*
 
 
 
@@ -163,7 +163,7 @@ ___
 
 **●  remount**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:51](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L51)*
+*Defined in [lib/funicular.ts:51](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L51)*
 
 
 
@@ -177,7 +177,7 @@ ___
 
 **●  remounted**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:52](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L52)*
+*Defined in [lib/funicular.ts:52](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L52)*
 
 
 
@@ -191,7 +191,7 @@ ___
 
 **●  started**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:49](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L49)*
+*Defined in [lib/funicular.ts:49](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L49)*
 
 
 
@@ -205,7 +205,7 @@ ___
 
 **●  starting**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:48](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L48)*
+*Defined in [lib/funicular.ts:48](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L48)*
 
 
 
@@ -219,7 +219,7 @@ ___
 
 **●  stopped**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:55](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L55)*
+*Defined in [lib/funicular.ts:55](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L55)*
 
 
 
@@ -233,7 +233,7 @@ ___
 
 **●  stopping**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:54](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L54)*
+*Defined in [lib/funicular.ts:54](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L54)*
 
 
 
@@ -247,7 +247,7 @@ ___
 
 **●  unmount**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:53](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L53)*
+*Defined in [lib/funicular.ts:53](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L53)*
 
 
 
@@ -261,7 +261,7 @@ ___
 
 **●  unmounted**:  *`ID`* 
 
-*Defined in [lib/funicular.ts:58](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L58)*
+*Defined in [lib/funicular.ts:58](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L58)*
 
 
 

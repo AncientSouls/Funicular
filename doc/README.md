@@ -54,7 +54,7 @@
 
 **Τ TFunicular**:  *[IFunicular](interfaces/ifunicular.md)[IFunicularEventsList](interfaces/ifuniculareventslist.md)[IFunicularEventData](interfaces/ifuniculareventdata.md)* 
 
-*Defined in [lib/funicular.ts:23](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L23)*
+*Defined in [lib/funicular.ts:23](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L23)*
 
 
 
@@ -68,7 +68,7 @@ ___
 
 **Τ TFunicularsManager**:  *[IFunicularsManager](interfaces/ifunicularsmanager.md)[TFunicular](#tfunicular), [IFunicularsManagerEventsList](interfaces/ifunicularsmanagereventslist.md)* 
 
-*Defined in [lib/funiculars-manager.ts:22](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funiculars-manager.ts#L22)*
+*Defined in [lib/funiculars-manager.ts:22](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funiculars-manager.ts#L22)*
 
 
 
@@ -84,7 +84,7 @@ ___
 
 **●  MixedFunicular**:  *`TClass`.<[IFunicular](interfaces/ifunicular.md)[IFunicularEventsList](interfaces/ifuniculareventslist.md)[IFunicularEventData](interfaces/ifuniculareventdata.md)>*  =  mixin(Node)
 
-*Defined in [lib/funicular.ts:290](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L290)*
+*Defined in [lib/funicular.ts:290](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L290)*
 
 
 
@@ -98,7 +98,7 @@ ___
 
 **●  MixedFunicularsManager**:  *`TClass`.<[TFunicularsManager](#tfunicularsmanager)>*  =  mixin(Manager)
 
-*Defined in [lib/funiculars-manager.ts:43](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funiculars-manager.ts#L43)*
+*Defined in [lib/funiculars-manager.ts:43](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funiculars-manager.ts#L43)*
 
 
 
@@ -116,7 +116,7 @@ ___
 
 
 
-*Defined in [tests/funicular.ts:21](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/tests/funicular.ts#L21)*
+*Defined in [tests/funicular.ts:21](https://github.com/AncientSouls/Funicular/blob/677ce38/src/tests/funicular.ts#L21)*
 
 
 
@@ -138,7 +138,7 @@ ___
 
 
 
-*Defined in [lib/funiculars-manager.ts:35](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funiculars-manager.ts#L35)*
+*Defined in [lib/funiculars-manager.ts:35](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funiculars-manager.ts#L35)*
 
 
 

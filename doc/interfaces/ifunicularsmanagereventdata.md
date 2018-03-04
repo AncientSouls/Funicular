@@ -27,7 +27,7 @@
 
 *Inherited from [IFunicularEventData](ifuniculareventdata.md).[funicular](ifuniculareventdata.md#funicular)*
 
-*Defined in [lib/funicular.ts:35](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funicular.ts#L35)*
+*Defined in [lib/funicular.ts:35](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funicular.ts#L35)*
 
 
 
@@ -41,7 +41,7 @@ ___
 
 **●  manager**:  *[TFunicularsManager](../#tfunicularsmanager)* 
 
-*Defined in [lib/funiculars-manager.ts:25](https://github.com/AncientSouls/Funicular/blob/3c4e18e/src/lib/funiculars-manager.ts#L25)*
+*Defined in [lib/funiculars-manager.ts:25](https://github.com/AncientSouls/Funicular/blob/677ce38/src/lib/funiculars-manager.ts#L25)*
 
 
 
