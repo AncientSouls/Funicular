@@ -1,9 +1,8 @@
 
-# Ancient Souls Funicular
+# Ancient Funicular
 
 Abstract hierarchical life cycle of the mount.
 
-[![GitHub Release](https://img.shields.io/github/release/AncientSouls/Funicular.svg)](https://github.com/AncientSouls/Funicular/releases)
 [![NPM](https://img.shields.io/npm/v/ancient-funicular.svg)](https://www.npmjs.com/package/ancient-funicular)
 [![Build Status](https://travis-ci.org/AncientSouls/Funicular.svg?branch=master)](https://travis-ci.org/AncientSouls/Funicular)
 [![Read the Docs](https://img.shields.io/readthedocs/pip.svg)](https://ancientsouls.github.io/)
@@ -60,7 +59,7 @@ Abstract hierarchical life cycle of the mount.
 
 **Τ TFunicular**:  *[IFunicular](interfaces/ifunicular.md)[IFunicularEventsList](interfaces/ifuniculareventslist.md)[IFunicularEventData](interfaces/ifuniculareventdata.md)* 
 
-*Defined in [funicular.ts:23](https://github.com/AncientSouls/Funicular/blob/5a13c99/src/lib/funicular.ts#L23)*
+*Defined in [funicular.ts:23](https://github.com/AncientSouls/Funicular/blob/f6e6291/src/lib/funicular.ts#L23)*
 
 
 
@@ -74,7 +73,7 @@ ___
 
 **Τ TFunicularsManager**:  *[IFunicularsManager](interfaces/ifunicularsmanager.md)[TFunicular](#tfunicular), [IFunicularsManagerEventsList](interfaces/ifunicularsmanagereventslist.md)* 
 
-*Defined in [funiculars-manager.ts:22](https://github.com/AncientSouls/Funicular/blob/5a13c99/src/lib/funiculars-manager.ts#L22)*
+*Defined in [funiculars-manager.ts:22](https://github.com/AncientSouls/Funicular/blob/f6e6291/src/lib/funiculars-manager.ts#L22)*
 
 
 
@@ -90,7 +89,7 @@ ___
 
 **●  MixedFunicular**:  *`TClass`.<[IFunicular](interfaces/ifunicular.md)[IFunicularEventsList](interfaces/ifuniculareventslist.md)[IFunicularEventData](interfaces/ifuniculareventdata.md)>*  =  mixin(Node)
 
-*Defined in [funicular.ts:290](https://github.com/AncientSouls/Funicular/blob/5a13c99/src/lib/funicular.ts#L290)*
+*Defined in [funicular.ts:290](https://github.com/AncientSouls/Funicular/blob/f6e6291/src/lib/funicular.ts#L290)*
 
 
 
@@ -104,7 +103,7 @@ ___
 
 **●  MixedFunicularsManager**:  *`TClass`.<[TFunicularsManager](#tfunicularsmanager)>*  =  mixin(Manager)
 
-*Defined in [funiculars-manager.ts:43](https://github.com/AncientSouls/Funicular/blob/5a13c99/src/lib/funiculars-manager.ts#L43)*
+*Defined in [funiculars-manager.ts:43](https://github.com/AncientSouls/Funicular/blob/f6e6291/src/lib/funiculars-manager.ts#L43)*
 
 
 
@@ -122,7 +121,7 @@ ___
 
 
 
-*Defined in [funiculars-manager.ts:35](https://github.com/AncientSouls/Funicular/blob/5a13c99/src/lib/funiculars-manager.ts#L35)*
+*Defined in [funiculars-manager.ts:35](https://github.com/AncientSouls/Funicular/blob/f6e6291/src/lib/funiculars-manager.ts#L35)*
 
 
 

@@ -9,7 +9,7 @@
 
 
 
-*Defined in [funicular.ts:38](https://github.com/AncientSouls/Funicular/blob/5a13c99/src/lib/funicular.ts#L38)*
+*Defined in [funicular.ts:38](https://github.com/AncientSouls/Funicular/blob/f6e6291/src/lib/funicular.ts#L38)*
 
 
 

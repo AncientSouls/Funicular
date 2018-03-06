@@ -25,7 +25,7 @@
 
 **●  funicular**:  *[TFunicular](../#tfunicular)* 
 
-*Defined in [funicular.ts:35](https://github.com/AncientSouls/Funicular/blob/5a13c99/src/lib/funicular.ts#L35)*
+*Defined in [funicular.ts:35](https://github.com/AncientSouls/Funicular/blob/f6e6291/src/lib/funicular.ts#L35)*
 
 
 
