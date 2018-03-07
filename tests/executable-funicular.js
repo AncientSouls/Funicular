@@ -28,7 +28,7 @@ function default_1() {
             var ccm = new childs_cursors_manager_1.ChildsCursorsManager();
             base.on('changed', ccm.maintain(''));
             var all = new ExecutableFunicularsManager();
-            var TestFunicular = /** @class */ (function (_super) {
+            var TestFunicular = (function (_super) {
                 __extends(TestFunicular, _super);
                 function TestFunicular() {
                     var _this = _super !== null && _super.apply(this, arguments) || this;
