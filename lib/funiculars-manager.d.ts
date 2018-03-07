@@ -9,7 +9,7 @@ interface IFunicularsManagerEventsList extends IManagerEventsList, IFunicularEve
 }
 interface IFunicularsManager<IN extends TFunicular, IEventsList extends IFunicularsManagerEventsList> extends IManager<IN, IEventsList> {
 }
-declare function mixin<T extends TClass<IInstance>>(superClass: T): any;
+declare function mixin<T extends TClass<IInstance>>(superClass: T, Node?: TClass<IInstance>): any;
 declare const MixedFunicularsManager: TClass<TFunicularsManager>;
 declare class FunicularsManager extends MixedFunicularsManager {
 }

@@ -20,7 +20,7 @@ import {
   TFunicularsManager,
 } from './funiculars-manager';
 
-type TFunicular = IFunicular<IFunicularEventsList<IFunicularEventData>>;
+type TFunicular = IFunicular<TCursor, IFunicularEventsList<IFunicularEventData>>;
 
 enum EFunicularState {
   Constructed = 0,
@@ -33,10 +33,6 @@ enum EFunicularState {
 
 interface IFunicularEventData {
   funicular: TFunicular;
-}
-
-interface IFunicularEventListener {
-  (data: IFunicularEventData): void;
 }
 
 interface IFunicularEventsList<ID extends IFunicularEventData> extends INodeEventsList {
@@ -62,16 +58,22 @@ interface IFunicularCallback {
   (): void;
 }
 
-interface IFunicular<IEventsList extends IFunicularEventsList<IFunicularEventData>>
-extends INode<IEventsList> {
-  Node: TClass<TFunicular>;
+interface IFunicularClone {
+  (instance: IInstance): IInstance;
+}
+
+interface IFunicular<
+IC extends TCursor,
+IEventsList extends IFunicularEventsList<IFunicularEventData>
+> extends INode<IEventsList> {
+  clone: IFunicularClone;
   
   state: EFunicularState;
   
   childs: TFunicularsManager;
   parents: TFunicularsManager;
   
-  cursor: TCursor;
+  cursor: IC;
   result: any;
   
   needRemount: boolean;
@@ -79,7 +81,7 @@ extends INode<IEventsList> {
   
   remounted: TFunicular;
   
-  mount(cursor: TCursor): void;
+  mount(cursor: IC): void;
   remount(): void;
   unmount(): void;
   
@@ -112,9 +114,10 @@ extends INode<IEventsList> {
 
 function mixin<T extends TClass<IInstance>>(
   superClass: T,
+  clone: IFunicularClone,
 ): any {
-  return class Funicular extends Node {
-    Node = Funicular;
+  return class FunicularMixed extends superClass {
+    clone = clone;
     
     state = EFunicularState.Constructed;
     
@@ -277,7 +280,7 @@ function mixin<T extends TClass<IInstance>>(
     }
     
     cloneAndMount(callback) {
-      const clone = new this.Node(this.id);
+      const clone = this.clone(this);
       clone.on('mounted', () => {
         this.remounted = clone;
         callback();
@@ -287,7 +290,7 @@ function mixin<T extends TClass<IInstance>>(
   };
 }
 
-const MixedFunicular: TClass<IFunicular<IFunicularEventsList<IFunicularEventData>>> = mixin(Node);
+const MixedFunicular: TClass<TFunicular> = mixin(Node, i => new Funicular(i.id));
 class Funicular extends MixedFunicular {}
 
 export {
@@ -298,8 +301,8 @@ export {
   IFunicular,
   EFunicularState,
   IFunicularCallback,
+  IFunicularClone,
   IFunicularEventData,
-  IFunicularEventListener,
   IFunicularEventsList,
   TFunicular,
 };
