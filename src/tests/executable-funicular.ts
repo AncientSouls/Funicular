@@ -4,6 +4,14 @@ import * as vm from 'vm';
 import * as async from 'async';
 
 import {
+  TClass,
+} from 'ancient-mixins/lib/mixins';
+
+import {
+  Manager,
+} from 'ancient-mixins/lib/manager';
+
+import {
   Cursor,
 } from 'ancient-cursor/lib/cursor';
 
@@ -13,27 +21,35 @@ import {
 
 import {
   Funicular,
+  mixin as funicularMixin,
   EFunicularState,
 } from '../lib/funicular';
 
 import {
-  FunicularsManager,
+  TExecutableFunicular,
+} from '../lib/executable-funicular';
+
+import {
+  mixin as funicularManagerMixin,
+  TFunicularsManager,
 } from '../lib/funiculars-manager';
 
 export default function () {
-  describe('Funicular:', () => {
+  describe('ExecutableFunicular:', () => {
     it('lifecycle', () => {
-      // In this test there are no situations outside the scope of the test, such as:
-      // existance of necessary data, local and global funicular identifiers, executable data...
-      
+      const ExecutableFunicular: TClass<TExecutableFunicular> =
+      funicularMixin(Funicular, i => new ExecutableFunicular(i.id));
+      const ExecutableFunicularsManager: TClass<TFunicularsManager> =
+      funicularManagerMixin(Manager, ExecutableFunicular);
+
       const base = new Cursor();
       const ccm = new ChildsCursorsManager();
       base.on('changed', ccm.maintain(''));
-      const all = new FunicularsManager();
+      const all = new ExecutableFunicularsManager();
       
-      class TestFunicular extends Funicular {
+      class TestFunicular extends ExecutableFunicular {
         clone = i => new TestFunicular(i.id);
-
+        
         register(callback) {
           if (!all.nodes[this.id]) all.add(this);
           callback();
@@ -57,10 +73,10 @@ export default function () {
         }
         
         requestChilds(callback) {
-          async.each(
+          async.eachOf(
             this.cursor.get('childs'),
-            (c, done) => {
-              this.requestChild(c, (child) => {
+            (globalName, localName, done) => {
+              this.requestChild(globalName, (child) => {
                 this.childs.add(child);
                 done();
               });
@@ -82,7 +98,21 @@ export default function () {
         }
         
         starting(callback) {
-          this.result = this.cursor.get('value') + _.map(this.childs.nodes, c => c.result).join('');
+          const context = {
+            require: (localName) => {
+              return this.childs.nodes[this.cursor.get('childs')[localName]].result;
+            },
+            module: {
+              exports: {},
+            },
+          };
+
+          vm.runInNewContext(this.cursor.get('value'), context, {
+            filename: this.cursor.get('globalName'),
+            timeout: 500,
+          });
+
+          this.result = context.module.exports;
           callback();
         }
         
@@ -93,9 +123,31 @@ export default function () {
       }
       
       base.exec(null, {
-        a: { value: 'a', childs: ['b','c'] },
-        b: { value: 'b', childs: [] },
-        c: { value: 'c', childs: [] },
+        a: {
+          type: 'js',
+          globalName: 'a',
+          value: `
+var b = require('./b');
+var c = require('./c');
+module.exports = 'a'+b+c;
+          `,
+          childs: {
+            './b': 'b',
+            './c': 'c',
+          },
+        },
+        b: {
+          type: 'js',
+          globalName: 'b',
+          value: `module.exports = 'b';`,
+          childs: {},
+        },
+        c: {
+          type: 'js',
+          globalName: 'c',
+          value: `module.exports = 'c';`,
+          childs: {},
+        },
       });
       
       const f = new TestFunicular('a');
@@ -119,7 +171,7 @@ export default function () {
       base.apply({
         type: 'set',
         path: 'b.value',
-        value: 'd',
+        value: `module.exports = 'd';`,
       });
       
       assert.deepEqual(emits, [
