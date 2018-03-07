@@ -20,13 +20,11 @@ var funiculars_manager_1 = require("../lib/funiculars-manager");
 function default_1() {
     describe('Funicular:', function () {
         it('lifecycle', function () {
-            // In this test there are no situations outside the scope of the test, such as:
-            // existance of necessary data, local and global funicular identifiers, executable data...
             var base = new cursor_1.Cursor();
             var ccm = new childs_cursors_manager_1.ChildsCursorsManager();
             base.on('changed', ccm.maintain(''));
             var all = new funiculars_manager_1.FunicularsManager();
-            var TestFunicular = /** @class */ (function (_super) {
+            var TestFunicular = (function (_super) {
                 __extends(TestFunicular, _super);
                 function TestFunicular() {
                     var _this = _super !== null && _super.apply(this, arguments) || this;
