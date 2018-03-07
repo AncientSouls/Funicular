@@ -1,0 +1,35 @@
+language: node_js
+
+node_js:
+  - "9"
+  - "8"
+  - "7"
+  - "6"
+  - "5"
+  - "4"
+
+os:
+  - linux
+  - osx
+
+install:
+  - npm install
+
+script:
+  - npm run dev-test
+jobs:
+  include:
+      stage: deploy
+      node_js: "9"
+      os: "linux"
+      before_deploy:
+        - git stash --all
+        - npm install
+        - npm run tsc
+      deploy:
+        - provider: npm
+          skip_cleanup: true
+          email: "ancientpublicator@gmail.com"
+          api_key: $AP_NPM_API_KEY
+          on:
+            branch: master
