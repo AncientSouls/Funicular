@@ -1,6 +1,6 @@
 {
   "name": "ancient-funicular",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Abstract hierarchical life cycle of the mount.",
   "bugs": "https://github.com/AncientSouls/Funicular/issues",
   "repository": "AncientSouls/Funicular",
