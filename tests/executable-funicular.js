@@ -12,18 +12,22 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var _ = require("lodash");
 var chai_1 = require("chai");
+var vm = require("vm");
 var async = require("async");
+var manager_1 = require("ancient-mixins/lib/manager");
 var cursor_1 = require("ancient-cursor/lib/cursor");
 var childs_cursors_manager_1 = require("ancient-cursor/lib/childs-cursors-manager");
 var funicular_1 = require("../lib/funicular");
 var funiculars_manager_1 = require("../lib/funiculars-manager");
 function default_1() {
-    describe('Funicular:', function () {
+    describe('ExecutableFunicular:', function () {
         it('lifecycle', function () {
+            var ExecutableFunicular = funicular_1.mixin(funicular_1.Funicular, function (i) { return new ExecutableFunicular(i.id); });
+            var ExecutableFunicularsManager = funiculars_manager_1.mixin(manager_1.Manager, ExecutableFunicular);
             var base = new cursor_1.Cursor();
             var ccm = new childs_cursors_manager_1.ChildsCursorsManager();
             base.on('changed', ccm.maintain(''));
-            var all = new funiculars_manager_1.FunicularsManager();
+            var all = new ExecutableFunicularsManager();
             var TestFunicular = (function (_super) {
                 __extends(TestFunicular, _super);
                 function TestFunicular() {
@@ -57,8 +61,8 @@ function default_1() {
                 };
                 TestFunicular.prototype.requestChilds = function (callback) {
                     var _this = this;
-                    async.each(this.cursor.get('childs'), function (c, done) {
-                        _this.requestChild(c, function (child) {
+                    async.eachOf(this.cursor.get('childs'), function (globalName, localName, done) {
+                        _this.requestChild(globalName, function (child) {
                             _this.childs.add(child);
                             done();
                         });
@@ -74,7 +78,20 @@ function default_1() {
                     }, function () { return callback(); });
                 };
                 TestFunicular.prototype.starting = function (callback) {
-                    this.result = this.cursor.get('value') + _.map(this.childs.nodes, function (c) { return c.result; }).join('');
+                    var _this = this;
+                    var context = {
+                        require: function (localName) {
+                            return _this.childs.nodes[_this.cursor.get('childs')[localName]].result;
+                        },
+                        module: {
+                            exports: {}
+                        }
+                    };
+                    vm.runInNewContext(this.cursor.get('value'), context, {
+                        filename: this.cursor.get('globalName'),
+                        timeout: 500
+                    });
+                    this.result = context.module.exports;
                     callback();
                 };
                 TestFunicular.prototype.stopping = function (callback) {
@@ -82,11 +99,29 @@ function default_1() {
                     callback();
                 };
                 return TestFunicular;
-            }(funicular_1.Funicular));
+            }(ExecutableFunicular));
             base.exec(null, {
-                a: { value: 'a', childs: ['b', 'c'] },
-                b: { value: 'b', childs: [] },
-                c: { value: 'c', childs: [] }
+                a: {
+                    type: 'js',
+                    globalName: 'a',
+                    value: "\nvar b = require('./b');\nvar c = require('./c');\nmodule.exports = 'a'+b+c;\n          ",
+                    childs: {
+                        './b': 'b',
+                        './c': 'c'
+                    }
+                },
+                b: {
+                    type: 'js',
+                    globalName: 'b',
+                    value: "module.exports = 'b';",
+                    childs: {}
+                },
+                c: {
+                    type: 'js',
+                    globalName: 'c',
+                    value: "module.exports = 'c';",
+                    childs: {}
+                }
             });
             var f = new TestFunicular('a');
             var emits = [];
@@ -107,7 +142,7 @@ function default_1() {
             base.apply({
                 type: 'set',
                 path: 'b.value',
-                value: 'd'
+                value: "module.exports = 'd';"
             });
             chai_1.assert.deepEqual(emits, [
                 'mounting',
@@ -129,4 +164,4 @@ function default_1() {
     });
 }
 exports["default"] = default_1;
-//# sourceMappingURL=funicular.js.map
+//# sourceMappingURL=executable-funicular.js.map

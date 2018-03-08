@@ -34,9 +34,10 @@ extends IManager<IN, IEventsList> {}
 
 function mixin<T extends TClass<IInstance>>(
   superClass: T,
+  Node: TClass<IInstance> = Funicular,
 ): any {
   return class FunicularsManager extends superClass {
-    public Node = Funicular;
+    Node = Node;
   };
 }
 
