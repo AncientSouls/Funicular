@@ -276,7 +276,7 @@ function mixin<T extends TClass<IInstance>>(
     }
     
     addParentToChilds() {
-      _.each(this.childs.nodes, child => child.parents.add(this));
+      _.each(this.childs.nodes, (child: any) => child.parents.add(this));
     }
     
     cloneAndMount(callback) {
