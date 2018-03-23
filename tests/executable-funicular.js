@@ -129,7 +129,6 @@ module.exports = 'a'+b+c;
                 path: 'b.value',
                 value: `module.exports = 'd';`,
             });
-            console.log(emits);
             chai_1.assert.deepEqual(emits, [
                 'mounting',
                 'cursorFilling', 'cursorFilled',

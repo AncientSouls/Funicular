@@ -91,7 +91,6 @@ function default_1() {
                 path: 'b.value',
                 value: 'd',
             });
-            console.log(emits);
             chai_1.assert.deepEqual(emits, [
                 'mounting',
                 'cursorFilling', 'cursorFilled',
