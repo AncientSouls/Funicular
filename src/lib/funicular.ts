@@ -287,6 +287,13 @@ function mixin<T extends TClass<IInstance>>(
       });
       clone.mount(this.cursor);
     }
+
+    destroy() {
+      if (this.state !== EFunicularState.Unmounted) {
+        throw new Error(`Not unmounted funicular ${this.id} cant be destroyed.`);
+      }
+      super.destroy();
+    }
   };
 }
 
