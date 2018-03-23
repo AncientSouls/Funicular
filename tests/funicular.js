@@ -20,17 +20,17 @@ function default_1() {
                     this.clone = i => new TestFunicular(i.id);
                 }
                 register(callback) {
-                    if (!all.nodes[this.id])
+                    if (!all.list.nodes[this.id])
                         all.add(this);
                     callback();
                 }
                 unregister(callback) {
-                    if (all.nodes[this.id])
+                    if (all.list.nodes[this.id])
                         all.remove(this);
                     callback();
                 }
                 requestChild(c, callback) {
-                    const oldChild = all.nodes[c];
+                    const oldChild = all.list.nodes[c];
                     if (oldChild) {
                         if (oldChild.state === funicular_1.EFunicularState.Mounted)
                             callback(oldChild);
@@ -40,7 +40,7 @@ function default_1() {
                     else {
                         const newChild = new TestFunicular(c);
                         newChild.on('mounted', () => callback(newChild));
-                        newChild.mount(ccm.nodes[newChild.id]);
+                        newChild.mount(ccm.list.nodes[newChild.id]);
                     }
                 }
                 requestChilds(callback) {
@@ -52,7 +52,7 @@ function default_1() {
                     }, () => callback());
                 }
                 abandonChilds(callback) {
-                    async.each(this.childs.nodes, (child, done) => {
+                    async.each(this.childs.list.nodes, (child, done) => {
                         child.parents.remove(this);
                         if (!_.size(child.parents))
                             child.unmount();
@@ -60,7 +60,7 @@ function default_1() {
                     }, () => callback());
                 }
                 starting(callback) {
-                    this.result = this.cursor.get('value') + _.map(this.childs.nodes, c => c.result).join('');
+                    this.result = this.cursor.get('value') + _.map(this.childs.list.nodes, (c) => c.result).join('');
                     callback();
                 }
                 stopping(callback) {
@@ -76,7 +76,7 @@ function default_1() {
             const f = new TestFunicular('a');
             const emits = [];
             f.on('emit', ({ eventName }) => emits.push(eventName));
-            f.mount(ccm.nodes[f.id]);
+            f.mount(ccm.list.nodes[f.id]);
             chai_1.assert.deepEqual(emits, [
                 'mounting',
                 'cursorFilling', 'cursorFilled',
@@ -91,6 +91,7 @@ function default_1() {
                 path: 'b.value',
                 value: 'd',
             });
+            console.log(emits);
             chai_1.assert.deepEqual(emits, [
                 'mounting',
                 'cursorFilling', 'cursorFilled',

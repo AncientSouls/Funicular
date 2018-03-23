@@ -259,12 +259,12 @@ function mixin<T extends TClass<IInstance>>(
       this.removedListener = ({ node }) => node.remounted || this.childDestroyed(node);
       this.remountedListener = ({ funicular }) => this.childRemounted(funicular);
       this.childs.on('removed', this.removedListener);
-      this.childs.on('remounted', this.remountedListener);
+      this.childs.list.on('remounted', this.remountedListener);
     }
     
     unwatchChildsEvents() {
       this.childs.off('removed', this.removedListener);
-      this.childs.off('remounted', this.remountedListener);
+      this.childs.list.off('remounted', this.remountedListener);
     }
     
     childDestroyed(child) {
@@ -276,7 +276,7 @@ function mixin<T extends TClass<IInstance>>(
     }
     
     addParentToChilds() {
-      _.each(this.childs.nodes, (child: any) => child.parents.add(this));
+      _.each(this.childs.list.nodes, (child: any) => child.parents.add(this));
     }
     
     cloneAndMount(callback) {

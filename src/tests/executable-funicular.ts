@@ -51,24 +51,24 @@ export default function () {
         clone = i => new TestFunicular(i.id);
         
         register(callback) {
-          if (!all.nodes[this.id]) all.add(this);
+          if (!all.list.nodes[this.id]) all.add(this);
           callback();
         }
         
         unregister(callback) {
-          if (all.nodes[this.id]) all.remove(this);
+          if (all.list.nodes[this.id]) all.remove(this);
           callback();
         }
         
         requestChild(c, callback) {
-          const oldChild = all.nodes[c];
+          const oldChild = all.list.nodes[c];
           if (oldChild) {
             if (oldChild.state === EFunicularState.Mounted) callback(oldChild);
             else oldChild.on('mounted', () => callback(oldChild));
           } else {
             const newChild = new TestFunicular(c);
             newChild.on('mounted', () => callback(newChild));
-            newChild.mount(ccm.nodes[newChild.id]);
+            newChild.mount(ccm.list.nodes[newChild.id]);
           }
         }
         
@@ -87,7 +87,7 @@ export default function () {
         
         abandonChilds(callback) {
           async.each(
-            this.childs.nodes,
+            this.childs.list.nodes,
             (child, done) => {
               child.parents.remove(this);
               if (!_.size(child.parents)) child.unmount();
@@ -100,7 +100,7 @@ export default function () {
         starting(callback) {
           const context = {
             require: (localName) => {
-              return this.childs.nodes[this.cursor.get('childs')[localName]].result;
+              return this.childs.list.nodes[this.cursor.get('childs')[localName]].result;
             },
             module: {
               exports: {},
@@ -156,7 +156,7 @@ module.exports = 'a'+b+c;
       
       f.on('emit', ({ eventName }) => emits.push(eventName));
       
-      f.mount(ccm.nodes[f.id]);
+      f.mount(ccm.list.nodes[f.id]);
       
       assert.deepEqual(emits, [
         'mounting',

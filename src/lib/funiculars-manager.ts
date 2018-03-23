@@ -21,12 +21,8 @@ import {
 
 type TFunicularsManager = IFunicularsManager<TFunicular, IFunicularsManagerEventsList>;
 
-interface IFunicularsManagerEventData extends IFunicularEventData {
-  manager: TFunicularsManager;
-}
-
 interface IFunicularsManagerEventsList
-extends IManagerEventsList, IFunicularEventsList<IFunicularsManagerEventData> {}
+extends IManagerEventsList {}
 
 interface IFunicularsManager
 <IN extends TFunicular, IEventsList extends IFunicularsManagerEventsList>
@@ -50,7 +46,6 @@ export {
   MixedFunicularsManager,
   FunicularsManager,
   IFunicularsManager,
-  IFunicularsManagerEventData,
   IFunicularsManagerEventsList,
   TFunicularsManager,
 };
