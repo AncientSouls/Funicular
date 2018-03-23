@@ -1,100 +1,82 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-exports.__esModule = true;
-var _ = require("lodash");
-var chai_1 = require("chai");
-var async = require("async");
-var cursor_1 = require("ancient-cursor/lib/cursor");
-var childs_cursors_manager_1 = require("ancient-cursor/lib/childs-cursors-manager");
-var funicular_1 = require("../lib/funicular");
-var funiculars_manager_1 = require("../lib/funiculars-manager");
+Object.defineProperty(exports, "__esModule", { value: true });
+const _ = require("lodash");
+const chai_1 = require("chai");
+const async = require("async");
+const cursor_1 = require("ancient-cursor/lib/cursor");
+const childs_cursors_manager_1 = require("ancient-cursor/lib/childs-cursors-manager");
+const funicular_1 = require("../lib/funicular");
+const funiculars_manager_1 = require("../lib/funiculars-manager");
 function default_1() {
-    describe('Funicular:', function () {
-        it('lifecycle', function () {
-            var base = new cursor_1.Cursor();
-            var ccm = new childs_cursors_manager_1.ChildsCursorsManager();
+    describe('Funicular:', () => {
+        it('lifecycle', () => {
+            const base = new cursor_1.Cursor();
+            const ccm = new childs_cursors_manager_1.ChildsCursorsManager();
             base.on('changed', ccm.maintain(''));
-            var all = new funiculars_manager_1.FunicularsManager();
-            var TestFunicular = (function (_super) {
-                __extends(TestFunicular, _super);
-                function TestFunicular() {
-                    var _this = _super !== null && _super.apply(this, arguments) || this;
-                    _this.clone = function (i) { return new TestFunicular(i.id); };
-                    return _this;
+            const all = new funiculars_manager_1.FunicularsManager();
+            class TestFunicular extends funicular_1.Funicular {
+                constructor() {
+                    super(...arguments);
+                    this.clone = i => new TestFunicular(i.id);
                 }
-                TestFunicular.prototype.register = function (callback) {
-                    if (!all.nodes[this.id])
+                register(callback) {
+                    if (!all.list.nodes[this.id])
                         all.add(this);
                     callback();
-                };
-                TestFunicular.prototype.unregister = function (callback) {
-                    if (all.nodes[this.id])
+                }
+                unregister(callback) {
+                    if (all.list.nodes[this.id])
                         all.remove(this);
                     callback();
-                };
-                TestFunicular.prototype.requestChild = function (c, callback) {
-                    var oldChild = all.nodes[c];
+                }
+                requestChild(c, callback) {
+                    const oldChild = all.list.nodes[c];
                     if (oldChild) {
                         if (oldChild.state === funicular_1.EFunicularState.Mounted)
                             callback(oldChild);
                         else
-                            oldChild.on('mounted', function () { return callback(oldChild); });
+                            oldChild.on('mounted', () => callback(oldChild));
                     }
                     else {
-                        var newChild_1 = new TestFunicular(c);
-                        newChild_1.on('mounted', function () { return callback(newChild_1); });
-                        newChild_1.mount(ccm.nodes[newChild_1.id]);
+                        const newChild = new TestFunicular(c);
+                        newChild.on('mounted', () => callback(newChild));
+                        newChild.mount(ccm.list.nodes[newChild.id]);
                     }
-                };
-                TestFunicular.prototype.requestChilds = function (callback) {
-                    var _this = this;
-                    async.each(this.cursor.get('childs'), function (c, done) {
-                        _this.requestChild(c, function (child) {
-                            _this.childs.add(child);
+                }
+                requestChilds(callback) {
+                    async.each(this.cursor.get('childs'), (c, done) => {
+                        this.requestChild(c, (child) => {
+                            this.childs.add(child);
                             done();
                         });
-                    }, function () { return callback(); });
-                };
-                TestFunicular.prototype.abandonChilds = function (callback) {
-                    var _this = this;
-                    async.each(this.childs.nodes, function (child, done) {
-                        child.parents.remove(_this);
+                    }, () => callback());
+                }
+                abandonChilds(callback) {
+                    async.each(this.childs.list.nodes, (child, done) => {
+                        child.parents.remove(this);
                         if (!_.size(child.parents))
                             child.unmount();
                         done();
-                    }, function () { return callback(); });
-                };
-                TestFunicular.prototype.starting = function (callback) {
-                    this.result = this.cursor.get('value') + _.map(this.childs.nodes, function (c) { return c.result; }).join('');
+                    }, () => callback());
+                }
+                starting(callback) {
+                    this.result = this.cursor.get('value') + _.map(this.childs.list.nodes, (c) => c.result).join('');
                     callback();
-                };
-                TestFunicular.prototype.stopping = function (callback) {
+                }
+                stopping(callback) {
                     this.result = undefined;
                     callback();
-                };
-                return TestFunicular;
-            }(funicular_1.Funicular));
+                }
+            }
             base.exec(null, {
                 a: { value: 'a', childs: ['b', 'c'] },
                 b: { value: 'b', childs: [] },
-                c: { value: 'c', childs: [] }
+                c: { value: 'c', childs: [] },
             });
-            var f = new TestFunicular('a');
-            var emits = [];
-            f.on('emit', function (_a) {
-                var eventName = _a.eventName;
-                return emits.push(eventName);
-            });
-            f.mount(ccm.nodes[f.id]);
+            const f = new TestFunicular('a');
+            const emits = [];
+            f.on('emit', ({ eventName }) => emits.push(eventName));
+            f.mount(ccm.list.nodes[f.id]);
             chai_1.assert.deepEqual(emits, [
                 'mounting',
                 'cursorFilling', 'cursorFilled',
@@ -107,7 +89,7 @@ function default_1() {
             base.apply({
                 type: 'set',
                 path: 'b.value',
-                value: 'd'
+                value: 'd',
             });
             chai_1.assert.deepEqual(emits, [
                 'mounting',
@@ -128,5 +110,5 @@ function default_1() {
         });
     });
 }
-exports["default"] = default_1;
+exports.default = default_1;
 //# sourceMappingURL=funicular.js.map
