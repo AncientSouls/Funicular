@@ -54,10 +54,6 @@ interface IFunicularEventsList<ID extends IFunicularEventData> extends INodeEven
   unmounted: ID;
 }
 
-interface IFunicularCallback {
-  (): void;
-}
-
 interface IFunicularClone {
   (instance: IInstance): IInstance;
 }
@@ -81,26 +77,26 @@ IEventsList extends IFunicularEventsList<IFunicularEventData>
   
   remounted: TFunicular;
   
-  mount(cursor: IC): void;
-  remount(): void;
-  unmount(): void;
+  mount(cursor: IC): Promise<void>;
+  remount(): Promise<any>;
+  unmount(): Promise<any>;
   
-  register(callback: IFunicularCallback): void;
-  unregister(callback: IFunicularCallback): void;
+  register(): Promise<any>;
+  unregister(): Promise<any>;
   
-  cursorFilling(callback: IFunicularCallback): void;
+  cursorFilling(): Promise<any>;
   
-  childsMounting(callback: IFunicularCallback): void;
-  childsUnmounting(callback: IFunicularCallback): void;
+  childsMounting(): Promise<any>;
+  childsUnmounting(): Promise<any>;
   
-  requestChilds(callback: IFunicularCallback): void;
-  abandonChilds(callback: IFunicularCallback): void;
+  requestChilds(): Promise<any>;
+  abandonChilds(): Promise<any>;
   
-  start(callback: IFunicularCallback): void;
-  stop(callback: IFunicularCallback): void;
+  start(): Promise<any>;
+  stop(): Promise<any>;
   
-  starting(callback: IFunicularCallback): void;
-  stopping(callback: IFunicularCallback): void;
+  starting(): Promise<any>;
+  stopping(): Promise<any>;
   
   watchChildsEvents(): void;
   unwatchChildsEvents(): void;
@@ -109,7 +105,7 @@ IEventsList extends IFunicularEventsList<IFunicularEventData>
   childRemounted(child: TFunicular): void;
   
   addParentToChilds(): void;
-  cloneAndMount(callback: IFunicularCallback): void;
+  cloneAndMount(): Promise<any>;
 }
 
 function mixin<T extends TClass<IInstance>>(
@@ -132,7 +128,7 @@ function mixin<T extends TClass<IInstance>>(
     
     remounted;
     
-    mount(cursor) {
+    async mount(cursor) {
       if (this.state !== EFunicularState.Constructed) {
         throw new Error(`Funicular ${this.id} is already mounted.`);
       }
@@ -141,117 +137,111 @@ function mixin<T extends TClass<IInstance>>(
       
       this.state = EFunicularState.Mounting;
       this.emit('mounting', { funicular: this });
-      this.register(_.once(() => {
-        this.cursorFilling(_.once(() => {
-          this.childsMounting(_.once(() => {
-            this.start(_.once(() => {
-              this.watchChildsEvents();
-              this.addParentToChilds();
-              this.state = EFunicularState.Mounted;
-              this.emit('mounted', { funicular: this });
+
+      await this.register();
+      await this.cursorFilling();
+      await this.childsMounting();
+      await this.start();
+      
+      this.watchChildsEvents();
+      this.addParentToChilds();
+      this.state = EFunicularState.Mounted;
+      this.emit('mounted', { funicular: this });
               
-              if (this.needUnmount) this.unmount();
-              else if (this.needRemount) this.remount();
-            }));
-          }));
-        }));
-      }));
+      if (this.needUnmount) await this.unmount();
+      else if (this.needRemount) await this.remount();
     }
     
-    remount() {
+    async remount() {
       if (this.state === EFunicularState.Mounted) {
         this.state = EFunicularState.Remounting;
         this.emit('remounting', { funicular: this });
-        this.unregister(_.once(() => {
-          this.cloneAndMount(_.once(() => {
-            this.emit('remounted', { funicular: this });
-            this.unmount();
-          }));
-        }));
+        await this.unregister();
+        await this.cloneAndMount();
+
+        this.emit('remounted', { funicular: this });
+
+        await this.unmount();
       } else this.needRemount = true;
     }
     
-    unmount() {
+    async unmount() {
       if (this.state === EFunicularState.Mounted || this.state === EFunicularState.Remounting) {
         this.state = EFunicularState.Unmounting;
         this.emit('unmounting', { funicular: this });
-        this.stop(_.once(() => {
-          this.childsUnmounting(_.once(() => {
-            this.unwatchChildsEvents();
-            this.unregister(_.once(() => {
-              this.state = EFunicularState.Unmounted;
-              this.emit('unmounted', { funicular: this });
-              this.destroy();
-            }));
-          }));
-        }));
+
+        await this.stop();
+        await this.childsUnmounting();
+        this.unwatchChildsEvents();
+        await this.unregister();
+        
+        this.state = EFunicularState.Unmounted;
+        this.emit('unmounted', { funicular: this });
+        await this.destroy();
       } else this.needUnmount = true;
     }
     
-    register(callback) {
+    register() {
       throw new Error('Method register must defined in this class!');
     }
     
-    unregister(callback) {
+    unregister() {
       throw new Error('Method unregister must defined in this class!');
     }
     
-    cursorFilling(callback) {
+    cursorFilling() {
       this.emit('cursorFilling', { funicular: this });
-      if (_.isUndefined(this.cursor.data)) {
-        this.cursor.once('changed', () => this.cursorFilling(callback));
-      } else {
-        this.cursor.once('changed', () => this.remount());
-        this.emit('cursorFilled', { funicular: this });
-        callback();
-      }
+      return new Promise((resolve) => {
+        if (_.isUndefined(this.cursor.data)) {
+          this.cursor.once('changed', async () => {
+            await this.cursorFilling();
+            resolve();
+          });
+        } else {
+          this.cursor.once('changed', () => this.remount());
+          this.emit('cursorFilled', { funicular: this });
+          resolve();
+        }
+      });
     }
     
-    childsMounting(callback) {
+    async childsMounting() {
       this.emit('childsMounting', { funicular: this });
-      this.requestChilds(_.once(() => {
-        this.emit('childsMounted', { funicular: this });
-        callback();
-      }));
+      await this.requestChilds();
+      this.emit('childsMounted', { funicular: this });
     }
     
-    childsUnmounting(callback) {
+    async childsUnmounting() {
       this.emit('childsUnmounting', { funicular: this });
-      this.abandonChilds(_.once(() => {
-        this.emit('childsUnmounted', { funicular: this });
-        callback();
-      }));
+      await this.abandonChilds();
+      this.emit('childsUnmounted', { funicular: this });
     }
     
-    requestChilds(callback) {
+    requestChilds() {
       throw new Error('Method requestChilds must defined in this class!');
     }
     
-    abandonChilds(callback) {
+    abandonChilds() {
       throw new Error('Method abandonChilds must defined in this class!');
     }
     
-    start(callback) {
+    async start() {
       this.emit('starting', { funicular: this });
-      this.starting(_.once(() => {
-        this.emit('started', { funicular: this });
-        callback();
-      }));
+      await this.starting();
+      this.emit('started', { funicular: this });
     }
     
-    stop(callback) {
+    async stop() {
       this.emit('stopping', { funicular: this });
-      this.stopping(_.once(() => {
-        this.emit('stopped', { funicular: this });
-        callback();
-      }));
+      await this.stopping();
+      this.emit('stopped', { funicular: this });
     }
     
-    starting(callback) {
+    starting() {
       throw new Error('Method starting must defined in this class!');
     }
     
-    stopping(callback) {
+    stopping() {
       throw new Error('Method stopping must defined in this class!');
     }
     
@@ -279,20 +269,22 @@ function mixin<T extends TClass<IInstance>>(
       _.each(this.childs.list.nodes, (child: any) => child.parents.add(this));
     }
     
-    cloneAndMount(callback) {
-      const clone = this.clone(this);
-      clone.on('mounted', () => {
-        this.remounted = clone;
-        callback();
+    cloneAndMount() {
+      return new Promise((resolve) => {
+        const clone = this.clone(this);
+        clone.once('mounted', () => {
+          this.remounted = clone;
+          resolve();
+        });
+        clone.mount(this.cursor);
       });
-      clone.mount(this.cursor);
     }
 
     destroy() {
       if (this.state !== EFunicularState.Unmounted) {
         throw new Error(`Not unmounted funicular ${this.id} cant be destroyed.`);
       }
-      super.destroy();
+      return super.destroy();
     }
   };
 }
@@ -307,7 +299,6 @@ export {
   Funicular,
   IFunicular,
   EFunicularState,
-  IFunicularCallback,
   IFunicularClone,
   IFunicularEventData,
   IFunicularEventsList,

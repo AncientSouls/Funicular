@@ -32,9 +32,6 @@ interface IFunicularEventsList<ID extends IFunicularEventData> extends INodeEven
     childsUnmounted: ID;
     unmounted: ID;
 }
-interface IFunicularCallback {
-    (): void;
-}
 interface IFunicularClone {
     (instance: IInstance): IInstance;
 }
@@ -48,29 +45,29 @@ interface IFunicular<IC extends TCursor, IEventsList extends IFunicularEventsLis
     needRemount: boolean;
     needUnmount: boolean;
     remounted: TFunicular;
-    mount(cursor: IC): void;
-    remount(): void;
-    unmount(): void;
-    register(callback: IFunicularCallback): void;
-    unregister(callback: IFunicularCallback): void;
-    cursorFilling(callback: IFunicularCallback): void;
-    childsMounting(callback: IFunicularCallback): void;
-    childsUnmounting(callback: IFunicularCallback): void;
-    requestChilds(callback: IFunicularCallback): void;
-    abandonChilds(callback: IFunicularCallback): void;
-    start(callback: IFunicularCallback): void;
-    stop(callback: IFunicularCallback): void;
-    starting(callback: IFunicularCallback): void;
-    stopping(callback: IFunicularCallback): void;
+    mount(cursor: IC): Promise<void>;
+    remount(): Promise<any>;
+    unmount(): Promise<any>;
+    register(): Promise<any>;
+    unregister(): Promise<any>;
+    cursorFilling(): Promise<any>;
+    childsMounting(): Promise<any>;
+    childsUnmounting(): Promise<any>;
+    requestChilds(): Promise<any>;
+    abandonChilds(): Promise<any>;
+    start(): Promise<any>;
+    stop(): Promise<any>;
+    starting(): Promise<any>;
+    stopping(): Promise<any>;
     watchChildsEvents(): void;
     unwatchChildsEvents(): void;
     childDestroyed(child: TFunicular): void;
     childRemounted(child: TFunicular): void;
     addParentToChilds(): void;
-    cloneAndMount(callback: IFunicularCallback): void;
+    cloneAndMount(): Promise<any>;
 }
 declare function mixin<T extends TClass<IInstance>>(superClass: T, clone: IFunicularClone): any;
 declare const MixedFunicular: TClass<TFunicular>;
 declare class Funicular extends MixedFunicular {
 }
-export { mixin as default, mixin, MixedFunicular, Funicular, IFunicular, EFunicularState, IFunicularCallback, IFunicularClone, IFunicularEventData, IFunicularEventsList, TFunicular };
+export { mixin as default, mixin, MixedFunicular, Funicular, IFunicular, EFunicularState, IFunicularClone, IFunicularEventData, IFunicularEventsList, TFunicular };
