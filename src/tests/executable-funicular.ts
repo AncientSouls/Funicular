@@ -34,9 +34,11 @@ import {
   TFunicularsManager,
 } from '../lib/funiculars-manager';
 
+const delay = (t): Promise<void> => new Promise(resolve => setTimeout(resolve, t));
+
 export default function () {
   describe('ExecutableFunicular:', () => {
-    it('lifecycle', () => {
+    it('lifecycle', async () => {
       const ExecutableFunicular: TClass<TExecutableFunicular> =
       funicularMixin(Funicular, i => new ExecutableFunicular(i.id));
       const ExecutableFunicularsManager: TClass<TFunicularsManager> =
@@ -50,14 +52,12 @@ export default function () {
       class TestFunicular extends ExecutableFunicular {
         clone = i => new TestFunicular(i.id);
         
-        register(callback) {
+        async register() {
           if (!all.list.nodes[this.id]) all.add(this);
-          callback();
         }
         
-        unregister(callback) {
+        async unregister() {
           if (all.list.nodes[this.id]) all.remove(this);
-          callback();
         }
         
         requestChild(c, callback) {
@@ -72,32 +72,36 @@ export default function () {
           }
         }
         
-        requestChilds(callback) {
-          async.eachOf(
-            this.cursor.get('childs'),
-            (globalName, localName, done) => {
-              this.requestChild(globalName, (child) => {
-                this.childs.add(child);
+        requestChilds() {
+          return new Promise((resolve) => {
+            async.eachOf(
+              this.cursor.get('childs'),
+              (globalName, localName, done) => {
+                this.requestChild(globalName, (child) => {
+                  this.childs.add(child);
+                  done();
+                });
+              },
+              () => resolve(),
+            );
+          });
+        }
+        
+        abandonChilds() {
+          return new Promise((resolve) => {
+            async.each(
+              this.childs.list.nodes,
+              (child, done) => {
+                child.parents.remove(this);
+                if (!_.size(child.parents)) child.unmount();
                 done();
-              });
-            },
-            () => callback(),
-          );
+              },
+              () => resolve(),
+            );
+          });
         }
         
-        abandonChilds(callback) {
-          async.each(
-            this.childs.list.nodes,
-            (child, done) => {
-              child.parents.remove(this);
-              if (!_.size(child.parents)) child.unmount();
-              done();
-            },
-            () => callback(),
-          );
-        }
-        
-        starting(callback) {
+        async starting() {
           const context = {
             require: (localName) => {
               return this.childs.list.nodes[this.cursor.get('childs')[localName]].result;
@@ -113,12 +117,10 @@ export default function () {
           });
 
           this.result = context.module.exports;
-          callback();
         }
         
-        stopping(callback) {
+        async stopping() {
           this.result = undefined;
-          callback();
         }
       }
       
@@ -156,7 +158,7 @@ module.exports = 'a'+b+c;
       
       f.on('emit', ({ eventName }) => emits.push(eventName));
       
-      f.mount(ccm.list.nodes[f.id]);
+      await f.mount(ccm.list.nodes[f.id]);
       
       assert.deepEqual(emits, [
         'mounting',
@@ -173,6 +175,8 @@ module.exports = 'a'+b+c;
         path: 'b.value',
         value: `module.exports = 'd';`,
       });
+
+      await delay(1);
       
       assert.deepEqual(emits, [
         'mounting',

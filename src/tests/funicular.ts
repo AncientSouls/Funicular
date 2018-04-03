@@ -20,9 +20,11 @@ import {
   FunicularsManager,
 } from '../lib/funiculars-manager';
 
+const delay = (t): Promise<void> => new Promise(resolve => setTimeout(resolve, t));
+
 export default function () {
   describe('Funicular:', () => {
-    it('lifecycle', () => {
+    it('lifecycle', async () => {
       // In this test there are no situations outside the scope of the test, such as:
       // existance of necessary data, local and global funicular identifiers, executable data...
       
@@ -34,14 +36,12 @@ export default function () {
       class TestFunicular extends Funicular {
         clone = i => new TestFunicular(i.id);
 
-        register(callback) {
+        async register() {
           if (!all.list.nodes[this.id]) all.add(this);
-          callback();
         }
         
-        unregister(callback) {
+        async unregister() {
           if (all.list.nodes[this.id]) all.remove(this);
-          callback();
         }
         
         requestChild(c, callback) {
@@ -56,42 +56,44 @@ export default function () {
           }
         }
         
-        requestChilds(callback) {
-          async.each(
-            this.cursor.get('childs'),
-            (c, done) => {
-              this.requestChild(c, (child) => {
-                this.childs.add(child);
+        requestChilds() {
+          return new Promise((resolve) => {
+            async.each(
+              this.cursor.get('childs'),
+              (c, done) => {
+                this.requestChild(c, (child) => {
+                  this.childs.add(child);
+                  done();
+                });
+              },
+              () => resolve(),
+            );
+          });
+        }
+        
+        abandonChilds() {
+          return new Promise((resolve) => {
+            async.each(
+              this.childs.list.nodes,
+              (child, done) => {
+                child.parents.remove(this);
+                if (!_.size(child.parents)) child.unmount();
                 done();
-              });
-            },
-            () => callback(),
-          );
+              },
+              () => resolve(),
+            );
+          });
         }
         
-        abandonChilds(callback) {
-          async.each(
-            this.childs.list.nodes,
-            (child, done) => {
-              child.parents.remove(this);
-              if (!_.size(child.parents)) child.unmount();
-              done();
-            },
-            () => callback(),
-          );
-        }
-        
-        starting(callback) {
+        async starting() {
           this.result = this.cursor.get('value') + _.map(
             this.childs.list.nodes,
             (c: any) => c.result,
           ).join('');
-          callback();
         }
         
-        stopping(callback) {
+        async stopping() {
           this.result = undefined;
-          callback();
         }
       }
       
@@ -106,7 +108,7 @@ export default function () {
       const emits = [];
       f.on('emit', ({ eventName }) => emits.push(eventName));
       
-      f.mount(ccm.list.nodes[f.id]);
+      await f.mount(ccm.list.nodes[f.id]);
       
       assert.deepEqual(emits, [
         'mounting',
@@ -123,6 +125,8 @@ export default function () {
         path: 'b.value',
         value: 'd',
       });
+
+      await delay(1);
       
       assert.deepEqual(emits, [
         'mounting',
