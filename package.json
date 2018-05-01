@@ -14,7 +14,7 @@
     "np": "./node_modules/np/cli.js --no-publish --no-yarn --yolo  --any-branch"
   },
   "dependencies": {
-    "ancient-cursor": "^0.2.9",
+    "ancient-cursor": "^0.2.10",
     "ancient-mixins": "^0.0.13",
     "lodash": "^4.17.10"
   },
