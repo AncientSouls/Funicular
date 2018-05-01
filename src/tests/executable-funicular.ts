@@ -13,11 +13,8 @@ import {
 
 import {
   Cursor,
+  spray,
 } from 'ancient-cursor/lib/cursor';
-
-import {
-  ChildsCursorsManager,
-} from 'ancient-cursor/lib/childs-cursors-manager';
 
 import {
   Funicular,
@@ -45,8 +42,8 @@ export default function () {
       funicularManagerMixin(Manager, ExecutableFunicular);
 
       const base = new Cursor();
-      const ccm = new ChildsCursorsManager();
-      base.on('changed', ccm.maintain(''));
+      const sprayed = new Manager();
+      base.on('changed', spray('', sprayed));
       const all = new ExecutableFunicularsManager();
       
       class TestFunicular extends ExecutableFunicular {
@@ -68,7 +65,7 @@ export default function () {
           } else {
             const newChild = new TestFunicular(c);
             newChild.on('mounted', () => callback(newChild));
-            newChild.mount(ccm.list.nodes[newChild.id]);
+            newChild.mount(sprayed.list.nodes[newChild.id]);
           }
         }
         
@@ -158,7 +155,7 @@ module.exports = 'a'+b+c;
       
       f.on('emit', ({ eventName }) => emits.push(eventName));
       
-      await f.mount(ccm.list.nodes[f.id]);
+      await f.mount(sprayed.list.nodes[f.id]);
       
       assert.deepEqual(emits, [
         'mounting',

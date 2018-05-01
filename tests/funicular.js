@@ -12,7 +12,7 @@ const _ = require("lodash");
 const chai_1 = require("chai");
 const async = require("async");
 const cursor_1 = require("ancient-cursor/lib/cursor");
-const childs_cursors_manager_1 = require("ancient-cursor/lib/childs-cursors-manager");
+const manager_1 = require("ancient-mixins/lib/manager");
 const funicular_1 = require("../lib/funicular");
 const funiculars_manager_1 = require("../lib/funiculars-manager");
 const delay = (t) => new Promise(resolve => setTimeout(resolve, t));
@@ -20,8 +20,8 @@ function default_1() {
     describe('Funicular:', () => {
         it('lifecycle', () => __awaiter(this, void 0, void 0, function* () {
             const base = new cursor_1.Cursor();
-            const ccm = new childs_cursors_manager_1.ChildsCursorsManager();
-            base.on('changed', ccm.maintain(''));
+            const sprayed = new manager_1.Manager();
+            base.on('changed', cursor_1.spray('', sprayed));
             const all = new funiculars_manager_1.FunicularsManager();
             class TestFunicular extends funicular_1.Funicular {
                 constructor() {
@@ -51,7 +51,7 @@ function default_1() {
                     else {
                         const newChild = new TestFunicular(c);
                         newChild.on('mounted', () => callback(newChild));
-                        newChild.mount(ccm.list.nodes[newChild.id]);
+                        newChild.mount(sprayed.list.nodes[newChild.id]);
                     }
                 }
                 requestChilds() {
@@ -93,7 +93,7 @@ function default_1() {
             const f = new TestFunicular('a');
             const emits = [];
             f.on('emit', ({ eventName }) => emits.push(eventName));
-            yield f.mount(ccm.list.nodes[f.id]);
+            yield f.mount(sprayed.list.nodes[f.id]);
             chai_1.assert.deepEqual(emits, [
                 'mounting',
                 'cursorFilling', 'cursorFilled',
