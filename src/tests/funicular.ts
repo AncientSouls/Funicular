@@ -5,11 +5,12 @@ import * as async from 'async';
 
 import {
   Cursor,
+  spray,
 } from 'ancient-cursor/lib/cursor';
 
 import {
-  ChildsCursorsManager,
-} from 'ancient-cursor/lib/childs-cursors-manager';
+  Manager,
+} from 'ancient-mixins/lib/manager';
 
 import {
   Funicular,
@@ -29,8 +30,8 @@ export default function () {
       // existance of necessary data, local and global funicular identifiers, executable data...
       
       const base = new Cursor();
-      const ccm = new ChildsCursorsManager();
-      base.on('changed', ccm.maintain(''));
+      const sprayed = new Manager();
+      base.on('changed', spray('', sprayed));
       const all = new FunicularsManager();
       
       class TestFunicular extends Funicular {
@@ -52,7 +53,7 @@ export default function () {
           } else {
             const newChild = new TestFunicular(c);
             newChild.on('mounted', () => callback(newChild));
-            newChild.mount(ccm.list.nodes[newChild.id]);
+            newChild.mount(sprayed.list.nodes[newChild.id]);
           }
         }
         
@@ -108,7 +109,7 @@ export default function () {
       const emits = [];
       f.on('emit', ({ eventName }) => emits.push(eventName));
       
-      await f.mount(ccm.list.nodes[f.id]);
+      await f.mount(sprayed.list.nodes[f.id]);
       
       assert.deepEqual(emits, [
         'mounting',
