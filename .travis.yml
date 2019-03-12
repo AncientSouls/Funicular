@@ -16,7 +16,6 @@ install:
   - npm install
 
 script:
-  - npm run tslint
   - npm run tsc
   - npm run test
 jobs:
